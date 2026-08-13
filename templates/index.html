@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherAI - AI Weather Prediction System</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar glass-panel">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-cloud-bolt text-accent"></i>
+                <div>
+                    <h1>WeatherAI</h1>
+                    <span>Machine Learning Forecast</span>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <a href="#dashboard" class="menu-item active" data-target="dashboard">
+                    <i class="fa-solid fa-house"></i> Dashboard
+                </a>
+                <a href="#forecast24" class="menu-item" data-target="forecast24">
+                    <i class="fa-solid fa-clock"></i> 24-Hour Forecast
+                </a>
+                <a href="#forecast5" class="menu-item" data-target="forecast5">
+                    <i class="fa-solid fa-calendar-days"></i> 5-Day Forecast
+                </a>
+                <a href="#performance" class="menu-item" data-target="performance">
+                    <i class="fa-solid fa-chart-line"></i> Model Performance
+                </a>
+            </div>
+
+            <div class="sidebar-bottom">
+                <button class="menu-item btn-ghost" id="btn-about" onclick="toggleModal('about-modal')">
+                    <i class="fa-solid fa-circle-info"></i> About
+                </button>
+                <button class="menu-item btn-ghost" id="btn-settings" onclick="toggleModal('settings-modal')">
+                    <i class="fa-solid fa-gear"></i> Settings
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                
+                <div class="search-wrapper">
+                    <input type="text" id="city-selector" class="search-input glass-input" placeholder="Search location..." list="city-list" autocomplete="off">
+                    <datalist id="city-list"></datalist>
+                    <button class="search-btn" onclick="searchCity()" aria-label="Search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+
+                <div class="header-actions">
+                    <button class="icon-btn tooltip-container" onclick="fetchDataForCurrentCity()" aria-label="Refresh Data">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span class="tooltip">Refresh</span>
+                    </button>
+                    <button class="icon-btn tooltip-container" id="theme-toggle" aria-label="Toggle Theme">
+                        <i class="fa-solid fa-moon"></i>
+                        <span class="tooltip">Theme</span>
+                    </button>
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Loading & Error States Overlay -->
+            <div id="status-overlay" class="status-overlay hidden">
+                <div class="status-content" id="status-content">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="content-scroll" id="main-scroll">
+                
+                <!-- DASHBOARD OVERVIEW -->
+                <section id="dashboard" class="page-section active">
+                    
+                    <div class="dashboard-top-grid">
+                        <!-- Hero Weather Card -->
+                        <div class="hero-card glass-panel fade-in">
+                            <div class="hero-header">
+                                <div>
+                                    <h2 id="curr-city" class="skeleton-text">Location</h2>
+                                    <p id="curr-date" class="text-secondary skeleton-text">Date</p>
+                                </div>
+                                <div class="badge badge-ai">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI FORECAST
+                                </div>
+                            </div>
+                            
+                            <div class="hero-body">
+                                <div class="weather-icon-huge skeleton-box">
+                                    <i id="curr-icon" class="fa-solid fa-cloud"></i>
+                                </div>
+                                <div class="temp-wrapper">
+                                    <h1 id="curr-temp" class="skeleton-text">--°</h1>
+                                    <p id="curr-cond" class="text-lg skeleton-text">Condition</p>
+                                </div>
+                            </div>
+                            
+                            <div class="hero-footer text-secondary">
+                                <span class="badge badge-outline"><i class="fa-solid fa-eye"></i> Observed Data</span>
+                                <span class="ml-auto text-sm">Powered by Machine Learning</span>
+                            </div>
+                        </div>
+
+                        <!-- Insight Placeholder -->
+                        <div class="insight-card glass-panel fade-in delay-1">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-wand-magic-sparkles text-accent"></i> AI Weather Insight</h3>
+                                <span class="badge badge-ai" id="insight-status-badge">Generating...</span>
+                            </div>
+                            <div id="ai-insight-tags" class="insight-tags"></div>
+                            <div class="insight-content">
+                                <p id="ai-insight" class="text-secondary">
+                                    <span class="insight-loading"><span></span><span></span><span></span></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metric Cards -->
+                    <div class="metrics-grid mt-6">
+                        <div class="metric-card glass-panel fade-in delay-2">
+                            <div class="metric-icon humidity-icon"><i class="fa-solid fa-droplet"></i></div>
+                            <div class="metric-info">
+                                <p class="text-secondary text-sm">Humidity</p>
+                                <h3 id="curr-hum" class="skeleton-text">--%</h3>
+                            </div>
+                        </div>
+                        <div class="metric-card glass-panel fade-in delay-3">
+                            <div class="metric-icon wind-icon"><i class="fa-solid fa-wind"></i></div>
+                            <div class="metric-info">
+                                <p class="text-secondary text-sm">Wind Speed</p>
+                                <h3 id="curr-wind" class="skeleton-text">-- km/h</h3>
+                            </div>
+                        </div>
+                        <div class="metric-card glass-panel fade-in delay-4">
+                            <div class="metric-icon pressure-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                            <div class="metric-info">
+                                <p class="text-secondary text-sm">Pressure</p>
+                                <h3 id="curr-pres" class="skeleton-text">-- hPa</h3>
+                            </div>
+                        </div>
+                        <div class="metric-card glass-panel fade-in delay-5">
+                            <div class="metric-icon rain-icon"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+                            <div class="metric-info">
+                                <p class="text-secondary text-sm">Precipitation</p>
+                                <h3 id="curr-rain" class="skeleton-text">--%</h3>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 24-HOUR FORECAST SECTION -->
+                <section id="forecast24" class="page-section mt-8">
+                    <div class="section-header">
+                        <h2>Next 24 Hours <span class="badge badge-ml ml-3">ML Prediction</span></h2>
+                        <p class="text-secondary">Mathematically generated diurnal curve from daily ML predictions.</p>
+                    </div>
+
+                    <!-- Hourly Carousel -->
+                    <div class="hourly-carousel glass-panel fade-in">
+                        <div class="carousel-scroll" id="hourly-container">
+                            <!-- Injected by JS -->
+                            <div class="skeleton-box" style="width: 100%; height: 120px; border-radius: 12px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 24H Trend Chart -->
+                    <div class="chart-wrapper glass-panel fade-in mt-6">
+                        <div class="chart-header">
+                            <h3>Weather Trends</h3>
+                            <div class="chart-controls">
+                                <button class="btn-sm active" onclick="switchChartMetric('temperature')">Temp</button>
+                                <button class="btn-sm" onclick="switchChartMetric('humidity')">Humidity</button>
+                                <button class="btn-sm" onclick="switchChartMetric('wind')">Wind</button>
+                                <button class="btn-sm" onclick="switchChartMetric('rain')">Rain</button>
+                            </div>
+                        </div>
+                        <div class="canvas-container">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5-DAY FORECAST SECTION -->
+                <section id="forecast5" class="page-section mt-8">
+                    <div class="section-header">
+                        <h2>5-Day Forecast <span class="badge badge-ml ml-3">Recursive ML Prediction</span></h2>
+                        <p class="text-secondary">Predicted outlook for the upcoming days.</p>
+                    </div>
+
+                    <div class="daily-grid" id="daily-container">
+                        <!-- Injected by JS -->
+                        <div class="skeleton-box" style="width: 100%; height: 200px; border-radius: 16px;"></div>
+                        <div class="skeleton-box" style="width: 100%; height: 200px; border-radius: 16px;"></div>
+                        <div class="skeleton-box" style="width: 100%; height: 200px; border-radius: 16px;"></div>
+                        <div class="skeleton-box" style="width: 100%; height: 200px; border-radius: 16px;"></div>
+                        <div class="skeleton-box" style="width: 100%; height: 200px; border-radius: 16px;"></div>
+                    </div>
+                </section>
+
+                <!-- MODEL PERFORMANCE SECTION -->
+                <section id="performance" class="page-section mt-8 mb-8">
+                    <div class="section-header">
+                        <h2>AI Model Performance</h2>
+                        <p class="text-secondary">Actual test set metrics from backend validation.</p>
+                    </div>
+
+                    <div class="performance-card glass-panel fade-in">
+                        <div class="perf-header">
+                            <p class="text-sm text-secondary uppercase tracking-wider">Best Performing Model</p>
+                            <h2 id="perf-name" class="text-gradient skeleton-text">Random Forest</h2>
+                        </div>
+                        
+                        <div class="perf-metrics-grid mt-6">
+                            <div class="perf-stat">
+                                <p class="text-secondary">R² Score</p>
+                                <h3 id="perf-r2" class="skeleton-text">--</h3>
+                                <p class="text-xs text-secondary mt-1">Accuracy</p>
+                            </div>
+                            <div class="perf-stat">
+                                <p class="text-secondary">RMSE</p>
+                                <h3 id="perf-rmse" class="skeleton-text">--°C</h3>
+                                <p class="text-xs text-secondary mt-1">Root Mean Square Error</p>
+                            </div>
+                            <div class="perf-stat">
+                                <p class="text-secondary">MAE</p>
+                                <h3 id="perf-mae" class="skeleton-text">--°C</h3>
+                                <p class="text-xs text-secondary mt-1">Mean Absolute Error</p>
+                            </div>
+                        </div>
+
+                        <div class="perf-footer mt-6 text-sm text-secondary">
+                            <i class="fa-solid fa-circle-check text-success"></i> Model verified on 2025 Test Dataset
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer class="app-footer text-secondary">
+                    <p>WeatherAI &copy; 2026. Built with Python, Flask, Scikit-learn, and JavaScript.</p>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="icon-btn" onclick="toggleModal('settings-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Appearance</label>
+                    <div class="toggle-group">
+                        <button class="btn-toggle active" onclick="setTheme('dark')">Dark</button>
+                        <button class="btn-toggle" onclick="setTheme('light')">Light</button>
+                    </div>
+                </div>
+                <div class="setting-group mt-4">
+                    <label>Temperature Unit</label>
+                    <div class="toggle-group">
+                        <button class="btn-toggle active" id="unit-c" onclick="setUnit('C')">°C</button>
+                        <button class="btn-toggle" id="unit-f" onclick="setUnit('F')">°F</button>
+                    </div>
+                </div>
+                <div class="setting-group mt-4">
+                    <label>Animations</label>
+                    <div class="toggle-group">
+                        <button class="btn-toggle active" id="anim-on" onclick="setAnimation(true)">ON</button>
+                        <button class="btn-toggle" id="anim-off" onclick="setAnimation(false)">OFF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="modal-overlay hidden">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h2>About WeatherAI</h2>
+                <button class="icon-btn" onclick="toggleModal('about-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-secondary">WeatherAI uses machine learning to analyze historical weather patterns and generate weather predictions. The models are trained on chronological data splits using advanced feature engineering.</p>
+                <h4 class="mt-4 mb-2">Machine Learning Models Tested</h4>
+                <ul class="text-secondary ml-4" style="list-style-type: disc;">
+                    <li>Decision Tree</li>
+                    <li>Random Forest</li>
+                    <li>Support Vector Machine (SVM)</li>
+                </ul>
+                <h4 class="mt-4 mb-2">Built With</h4>
+                <p class="text-secondary">Python &bull; Flask &bull; Scikit-learn &bull; Vanilla JavaScript &bull; CSS3</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
