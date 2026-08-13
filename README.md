@@ -104,7 +104,6 @@ Weather Prediction/
 │
 ├── 📖 README.md                                     # This file - Installation & usage
 ├── 📖 about.md                                      # Project overview & learning outcomes
-├── 🔧 render.yaml                                   # Deployment configuration (Render.com)
 │
 └── 📁 venv/                                         # Virtual environment (created locally)
     ├── bin/                                         # Scripts (activate, python, pip)
@@ -121,7 +120,6 @@ Weather Prediction/
 | `extract.py` | Data preprocessing utilities | Python Module |
 | `generate_notebook.py` | Programmatic notebook generator | Python Utility |
 | `requirements.txt` | Python dependencies list | Configuration |
-| `render.yaml` | Cloud deployment config | Configuration |
 | `notebooks/weather_prediction_model.ipynb` | Interactive ML workflow | Jupyter Notebook |
 | `data/nepal_293_cities_weather_2020_2025.csv` | Raw weather dataset | Data File |
 | `models/*.pkl` | Serialized trained models | Binary Models |
@@ -523,7 +521,7 @@ pip install gunicorn
 # Run with Gunicorn (4 worker processes)
 gunicorn --workers 4 --bind 0.0.0.0:5000 app:app
 
-# For AWS/Azure/Render deployment, use:
+# For cloud deployment (AWS/Azure/Heroku), use:
 gunicorn --workers 4 --bind 0.0.0.0:$PORT app:app
 ```
 
@@ -1050,18 +1048,7 @@ A: Models can be extended for multi-target prediction (currently temperature-foc
 
 ## 🚀 Deployment
 
-### Render.com Deployment (Recommended)
-
-```bash
-# Configuration in render.yaml (already included)
-# Push to GitHub
-git push origin main
-
-# Connect GitHub repo to Render
-# Deploy automatically from render.yaml
-```
-
-### Heroku Deployment (Alternative)
+### Heroku Deployment
 
 ```bash
 # Create Procfile
