@@ -4,6 +4,12 @@ A complete Machine Learning Weather Prediction System suitable for an AI/ML inte
 
 **Status:** ✅ Production-Ready | **Version:** 1.0.0 | **Python:** 3.8+ | **Last Updated:** 2026-08-13
 
+## 🌐 Live Demo
+
+**Try it now:** [🚀 Weather Prediction System on Streamlit](https://wether-prediction-system-nwpumaxegxqwve5dn56tmd.streamlit.app/)
+
+No installation needed! Access the live app directly in your browser.
+
 ## 🚀 Features
 - **Data Preprocessing & EDA:** Complete Jupyter notebook showcasing data cleaning, visualization, and time-series feature engineering.
 - **Machine Learning Models:** Trains and compares Decision Tree, Random Forest, and Support Vector Regression (SVR).
