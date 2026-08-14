@@ -37,6 +37,17 @@ import streamlit.components.v1 as components
 
 # 1.  CONFIGURATION
 API_PORT  = 5001          # Flask background server port
+
+import socket
+def _get_local_ip():
+    """Return the LAN IP of this machine (works on Windows/Linux/Mac)."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))   # doesn't send data, just resolves routing
+        return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"
+LOCAL_IP = _get_local_ip()
 BASE_DIR  = os.path.dirname(__file__)
 MODEL_DIR = os.path.join(BASE_DIR, 'models')
 DATA_PATH = os.path.join(BASE_DIR, 'data', 'nepal_293_cities_weather_2020_2025.csv')
@@ -414,12 +425,12 @@ def _start_flask(scaler, temp_model, multi_models, latest_by_city):
                 'season':    season,
                 'condition': pred['condition'],
                 'rain_pct':  pred['rain_chance'],
-                'temp':      round(pred['temperature'], 1),
+                'temp':      round(pred['temperature'], 1)
             }
         })
 
     _flask_started.set()
-    api.run(host='127.0.0.1', port=API_PORT, use_reloader=False, threaded=True)
+    api.run(host='0.0.0.0', port=API_PORT, use_reloader=False, threaded=True)
 
 
 # 5.  LOAD STATIC FILES
@@ -467,15 +478,15 @@ JS_PATH  = os.path.join(BASE_DIR, 'static', 'js',  'script.js')
 css_content = _read_file(CSS_PATH)
 js_content  = _read_file(JS_PATH)
 
-# Patch the JS so every fetch('/api/...') becomes fetch('http://127.0.0.1:PORT/api/...')
-# This is needed because in Streamlit the HTML component is inside an iframe
-# with a different origin, so relative paths won't reach Streamlit's server.
+# Patch the JS so every fetch('/api/...') becomes fetch('http://<LAN_IP>:PORT/api/...')
+# Using the real LAN IP (not 127.0.0.1) so that phones/tablets on the same network
+# can reach the Flask API running on this machine.
 patched_js = js_content.replace(
     "fetch('/api/",
-    f"fetch('http://127.0.0.1:{API_PORT}/api/"
+    f"fetch('http://{LOCAL_IP}:{API_PORT}/api/"
 ).replace(
     'fetch(`/api/',
-    f'fetch(`http://127.0.0.1:{API_PORT}/api/'
+    f'fetch(`http://{LOCAL_IP}:{API_PORT}/api/'
 )
 
 #  Build the full HTML page 

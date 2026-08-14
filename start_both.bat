@@ -9,6 +9,7 @@ echo ====================================
 :: Open firewall ports (silently)
 netsh advfirewall firewall add rule name="Weather App Flask 5000" dir=in action=allow protocol=TCP localport=5000 >nul 2>&1
 netsh advfirewall firewall add rule name="Weather App Streamlit 8501" dir=in action=allow protocol=TCP localport=8501 >nul 2>&1
+netsh advfirewall firewall add rule name="Weather App Flask API 5001" dir=in action=allow protocol=TCP localport=5001 >nul 2>&1
 
 :: Get local IP address
 for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /i "IPv4"') do (
