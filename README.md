@@ -2,7 +2,25 @@
 
 A complete Machine Learning Weather Prediction System suitable for an AI/ML internship or university project. This project trains machine learning models to forecast weather conditions and serves predictions through a modern, responsive web application.
 
-**Status:** ✅ Production-Ready | **Version:** 1.0.0 | **Python:** 3.8+ | **Last Updated:** 2026-08-13
+**Status:** ✅ Production-Ready | **Version:** 1.0.0 | **Python:** 3.8+ | **Last Updated:** 2026-08-14
+
+## 🌐 Live Demo
+
+**Try it now:** [🚀 Weather Prediction System on Streamlit](https://wether-prediction-system-nwpumaxegxqwve5dn56tmd.streamlit.app/)
+
+No installation needed! Access the live app directly in your browser.
+
+## ☁️ Ready for Render Deployment
+
+**Status:** ✅ Fully Configured for Render  
+All necessary files are in place:
+- ✅ `Procfile` - Production process definition
+- ✅ `render.yaml` - Render service configuration  
+- ✅ `runtime.txt` - Python 3.11.7
+- ✅ `requirements.txt` - All dependencies specified
+- ✅ `app.py` - Production-ready Flask app (PORT environment variable support)
+
+**One-Click Deployment:** See the [Render Deployment](#render-deployment--recommended) section below for step-by-step instructions.
 
 ## 🚀 Features
 - **Data Preprocessing & EDA:** Complete Jupyter notebook showcasing data cleaning, visualization, and time-series feature engineering.
@@ -1047,6 +1065,58 @@ A: Models can be extended for multi-target prediction (currently temperature-foc
 ---
 
 ## 🚀 Deployment
+
+### Render Deployment ✅ **RECOMMENDED**
+
+**Files Already Configured:**
+- ✅ `Procfile` - Web process definition for Render
+- ✅ `render.yaml` - Render-specific configuration
+- ✅ `runtime.txt` - Python version specification
+
+**Steps to Deploy:**
+
+1. **Push to GitHub:**
+   ```bash
+   git add .
+   git commit -m "Ready for Render deployment"
+   git push origin main
+   ```
+
+2. **Create Render Account:**
+   - Visit [render.com](https://render.com/)
+   - Sign up with GitHub account
+
+3. **Create New Web Service:**
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Select the Weather Prediction repository
+
+4. **Configure Deployment:**
+   - **Environment:** Python 3.11
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `gunicorn app:app`
+   - **Auto-deploy:** Enable (optional)
+
+5. **Set Environment Variables:**
+   - Go to Environment settings
+   - Add variables if needed:
+     - `FLASK_ENV=production`
+     - `PORT=10000` (Render default)
+
+6. **Deploy:**
+   - Click "Create Web Service"
+   - Wait for deployment (2-5 minutes)
+   - Your app will be live at `https://your-app-name.onrender.com`
+
+**Access Your Live App:**
+- Your URL will be displayed in the Render dashboard
+- Share the link to access the Weather Prediction System from anywhere!
+
+**Cost:**
+- Free tier: 50-100 hours/month
+- Paid tier: $7/month for 24/7 uptime
+
+---
 
 ### Heroku Deployment
 
