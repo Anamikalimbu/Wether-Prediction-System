@@ -4,23 +4,13 @@ A complete Machine Learning Weather Prediction System suitable for an AI/ML inte
 
 **Status:** ✅ Production-Ready | **Version:** 1.0.0 | **Python:** 3.8+ | **Last Updated:** 2026-08-14
 
-## 🌐 Live Demo
+## 🌐 Live Demo - Streamlit Deployment ✅
 
 **Try it now:** [🚀 Weather Prediction System on Streamlit](https://wether-prediction-system-nwpumaxegxqwve5dn56tmd.streamlit.app/)
 
-No installation needed! Access the live app directly in your browser.
-
-## ☁️ Ready for Render Deployment
-
-**Status:** ✅ Fully Configured for Render  
-All necessary files are in place:
-- ✅ `Procfile` - Production process definition
-- ✅ `render.yaml` - Render service configuration  
-- ✅ `runtime.txt` - Python 3.11.7
-- ✅ `requirements.txt` - All dependencies specified
-- ✅ `app.py` - Production-ready Flask app (PORT environment variable support)
-
-**One-Click Deployment:** See the [Render Deployment](#render-deployment--recommended) section below for step-by-step instructions.
+✨ **No installation needed!** Access the live app directly in your browser.  
+**Status:** ✅ Live & Fully Functional  
+**Deployment:** Streamlit Cloud (automatic updates from GitHub)
 
 ## 🚀 Features
 - **Data Preprocessing & EDA:** Complete Jupyter notebook showcasing data cleaning, visualization, and time-series feature engineering.
@@ -1064,61 +1054,38 @@ A: Models can be extended for multi-target prediction (currently temperature-foc
 
 ---
 
-## 🚀 Deployment
+## 🚀 Deployment Options
 
-### Render Deployment ✅ **RECOMMENDED**
+### Streamlit Deployment ✅ **LIVE & RECOMMENDED**
 
-**Files Already Configured:**
-- ✅ `Procfile` - Web process definition for Render
-- ✅ `render.yaml` - Render-specific configuration
-- ✅ `runtime.txt` - Python version specification
+**Status:** Already deployed and live at:  
+[🚀 https://wether-prediction-system-nwpumaxegxqwve5dn56tmd.streamlit.app/](https://wether-prediction-system-nwpumaxegxqwve5dn56tmd.streamlit.app/)
 
-**Steps to Deploy:**
+**Benefits:**
+- ✅ **Zero Configuration** - Works out of the box
+- ✅ **Free Hosting** - Community tier is always free
+- ✅ **Auto-Deploy** - Updates automatically from GitHub
+- ✅ **Fast & Reliable** - Hosted on Streamlit Cloud infrastructure
+- ✅ **Easy Sharing** - Direct URL without setup
 
-1. **Push to GitHub:**
-   ```bash
-   git add .
-   git commit -m "Ready for Render deployment"
-   git push origin main
-   ```
+**How It Works:**
+1. Push code to GitHub
+2. Streamlit Cloud automatically detects changes
+3. App updates instantly
+4. Share the live link with anyone
 
-2. **Create Render Account:**
-   - Visit [render.com](https://render.com/)
-   - Sign up with GitHub account
-
-3. **Create New Web Service:**
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - Select the Weather Prediction repository
-
-4. **Configure Deployment:**
-   - **Environment:** Python 3.11
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn app:app`
-   - **Auto-deploy:** Enable (optional)
-
-5. **Set Environment Variables:**
-   - Go to Environment settings
-   - Add variables if needed:
-     - `FLASK_ENV=production`
-     - `PORT=10000` (Render default)
-
-6. **Deploy:**
-   - Click "Create Web Service"
-   - Wait for deployment (2-5 minutes)
-   - Your app will be live at `https://your-app-name.onrender.com`
-
-**Access Your Live App:**
-- Your URL will be displayed in the Render dashboard
-- Share the link to access the Weather Prediction System from anywhere!
-
-**Cost:**
-- Free tier: 50-100 hours/month
-- Paid tier: $7/month for 24/7 uptime
+**To Deploy Your Own Fork:**
+1. Fork this repository on GitHub
+2. Visit [streamlit.io/cloud](https://streamlit.io/cloud)
+3. Click "New app" → Select your fork
+4. Select `streamlit_app.py` as the main file
+5. Click Deploy
 
 ---
 
-### Heroku Deployment
+### Alternative Deployments
+
+#### Heroku Deployment
 
 ```bash
 # Create Procfile
@@ -1206,5 +1173,5 @@ This project is open-source and suitable for educational, personal, and commerci
 ---
 
 **Version:** 1.0.0  
-**Last Updated:** 2026-08-13  
-**Status:** ✅ Active & Deployment-Ready
+**Last Updated:** 2026-08-14  
+**Status:** ✅ Live on Streamlit Cloud & Deployment-Ready

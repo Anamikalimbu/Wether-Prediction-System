@@ -4,6 +4,9 @@
 
 The **AI Weather Prediction System** is a comprehensive machine learning application designed to forecast weather conditions across Nepal's 293 cities. This project demonstrates a complete end-to-end ML pipeline, from data preprocessing and model training to production-ready deployment with a modern web interface.
 
+**🌟 Now Live on Streamlit!**  
+**Try it here:** [🚀 Weather Prediction System](https://wether-prediction-system-nwpumaxegxqwve5dn56tmd.streamlit.app/)
+
 Whether you're an AI/ML intern, university student, or developer looking to learn about time-series forecasting, this project showcases industry-standard practices for building, training, and deploying predictive models.
 
 ---
@@ -283,8 +286,9 @@ Potential extensions to this project:
 - Regional patterns may vary across Nepal's diverse geography
 
 ### Deployment Considerations
-- Current Flask setup suitable for development/testing
-- For production, use gunicorn/uWSGI with Nginx
+- ✅ **Streamlit Cloud** - Primary deployment (live and automatic)
+- **Flask Setup** - Suitable for custom deployments and APIs
+- Production use requires proper scaling and monitoring
 - Consider caching strategies for repeated predictions
 - Monitor model drift with periodic retraining
 
@@ -301,5 +305,5 @@ For questions, feedback, or suggestions about this project, refer to the main RE
 This project is designed for educational purposes. 
 ---
 
-**Last Updated:** 2026-08-13  
-**Project Status:** ✅ Complete & Deployment-Ready
+**Last Updated:** 2026-08-14  
+**Project Status:** ✅ Live on Streamlit Cloud | Complete & Production-Ready
