@@ -9,7 +9,7 @@ import random
 
 app = Flask(__name__)
 
-# ─── Paths ────────────────────────────────────────────────────────────────────
+# Paths
 BASE_DIR  = os.path.dirname(__file__)
 MODEL_DIR = os.path.join(BASE_DIR, 'models')
 DATA_PATH = os.path.join(BASE_DIR, 'data', 'nepal_293_cities_weather_2020_2025.csv')
@@ -23,7 +23,7 @@ FEATURES = [
     'Temp_2m_rolling_mean_7'
 ]
 
-# ─── Load models ──────────────────────────────────────────────────────────────
+# Load models 
 print("Loading models …")
 scaler       = joblib.load(os.path.join(MODEL_DIR, 'preprocessing_pipeline.pkl'))
 temp_model   = joblib.load(os.path.join(MODEL_DIR, 'best_temperature_model.pkl'))
@@ -33,7 +33,7 @@ with open(os.path.join(MODEL_DIR, 'district_classes.json')) as f:
     district_classes = json.load(f)           # list, ordered as LabelEncoder saw them
 district_index = {name: idx for idx, name in enumerate(district_classes)}
 
-# ─── Load & pre-process dataset once ─────────────────────────────────────────
+#  Load & pre-process dataset once 
 print("Loading CSV (may take a moment) …")
 df = pd.read_csv(DATA_PATH)
 df['Date'] = pd.to_datetime(df['Date'])
@@ -75,7 +75,7 @@ latest_by_city = (
 print(f"Ready. {len(latest_by_city)} cities available.")
 
 
-# ─── Helpers ──────────────────────────────────────────────────────────────────
+#  Helpers 
 def resolve_city(name: str):
     """Return the row Series for name, or the closest match, or global last."""
     if name in latest_by_city.index:
@@ -148,7 +148,7 @@ def generate_diurnal_curve(min_temp, max_temp, base_humidity, start_hour=10):
     return hours, temps, humidities
 
 
-# ─── Routes ───────────────────────────────────────────────────────────────────
+# Routes
 @app.route('/')
 def index():
     return render_template('index.html')

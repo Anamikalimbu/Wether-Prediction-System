@@ -28,16 +28,14 @@ import numpy as np
 import pandas as pd
 import joblib
 
-# ── Flask (background API server) ──────────────────────────────────────────
+#Flask (background API server) 
 from flask import Flask, request, jsonify
 
-# ── Streamlit ───────────────────────────────────────────────────────────────
+#Streamlit 
 import streamlit as st
 import streamlit.components.v1 as components
 
-# ═══════════════════════════════════════════════════════════════════════════
 # 1.  CONFIGURATION
-# ═══════════════════════════════════════════════════════════════════════════
 API_PORT  = 5001          # Flask background server port
 BASE_DIR  = os.path.dirname(__file__)
 MODEL_DIR = os.path.join(BASE_DIR, 'models')
@@ -51,9 +49,7 @@ FEATURES = [
     'Temp_2m_rolling_mean_7'
 ]
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 2.  MODEL & DATA LOADING  (cached so Streamlit only does this once)
-# ═══════════════════════════════════════════════════════════════════════════
+# 2.  MODEL & DATA LOADING 
 @st.cache_resource(show_spinner="Loading AI models…")
 def load_resources():
     scaler       = joblib.load(os.path.join(MODEL_DIR, 'preprocessing_pipeline.pkl'))
@@ -98,9 +94,7 @@ def load_resources():
     return scaler, temp_model, multi_models, district_index, latest_by_city
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-# 3.  HELPER FUNCTIONS  (identical logic to app.py)
-# ═══════════════════════════════════════════════════════════════════════════
+# 3.  HELPER FUNCTIONS
 def resolve_city(name, latest_by_city):
     if name in latest_by_city.index:
         return latest_by_city.loc[name]
@@ -267,9 +261,8 @@ def build_ai_insight(city, pred):
     return ' '.join(sentences), season
 
 
-# ═══════════════════════════════════════════════════════════════════════════
 # 4.  BACKGROUND FLASK API SERVER
-# ═══════════════════════════════════════════════════════════════════════════
+
 _flask_started = threading.Event()
 
 def _start_flask(scaler, temp_model, multi_models, latest_by_city):
@@ -281,8 +274,8 @@ def _start_flask(scaler, temp_model, multi_models, latest_by_city):
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
 
-    # ── CORS so the browser-side JS (served from Streamlit origin) can
-    #    call the Flask server on a different port ────────────────────
+    # CORS so the browser-side JS  can
+    # call the Flask server on a different port
     @api.after_request
     def add_cors(response):
         response.headers['Access-Control-Allow-Origin'] = '*'
@@ -429,17 +422,13 @@ def _start_flask(scaler, temp_model, multi_models, latest_by_city):
     api.run(host='127.0.0.1', port=API_PORT, use_reloader=False, threaded=True)
 
 
-# ═══════════════════════════════════════════════════════════════════════════
 # 5.  LOAD STATIC FILES
-# ═══════════════════════════════════════════════════════════════════════════
 def _read_file(path):
     with open(path, 'r', encoding='utf-8') as f:
         return f.read()
 
 
-# ═══════════════════════════════════════════════════════════════════════════
 # 6.  STREAMLIT PAGE
-# ═══════════════════════════════════════════════════════════════════════════
 st.set_page_config(
     page_title="WeatherAI – ML Forecast",
     page_icon="🌤️",
@@ -457,10 +446,10 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── Load resources (cached) ─────────────────────────────────────────────────
+# Load resources 
 scaler, temp_model, multi_models, district_index, latest_by_city = load_resources()
 
-# ── Start Flask background thread (only once per Streamlit session) ─────────
+# Start Flask background thread  
 if 'flask_thread_started' not in st.session_state:
     t = threading.Thread(
         target=_start_flask,
@@ -471,7 +460,7 @@ if 'flask_thread_started' not in st.session_state:
     _flask_started.wait(timeout=10)   # wait up to 10 s for Flask to bind
     st.session_state['flask_thread_started'] = True
 
-# ── Read static files ────────────────────────────────────────────────────────
+#  Read static files 
 CSS_PATH = os.path.join(BASE_DIR, 'static', 'css', 'style.css')
 JS_PATH  = os.path.join(BASE_DIR, 'static', 'js',  'script.js')
 
@@ -489,7 +478,7 @@ patched_js = js_content.replace(
     f'fetch(`http://127.0.0.1:{API_PORT}/api/'
 )
 
-# ── Build the full HTML page ─────────────────────────────────────────────────
+#  Build the full HTML page 
 with open(os.path.join(BASE_DIR, 'templates', 'index.html'), 'r', encoding='utf-8') as f:
     html_template = f.read()
 
@@ -510,5 +499,5 @@ full_html = full_html.replace(
     patched_js_tag
 )
 
-# ── Render inside Streamlit ──────────────────────────────────────────────────
+#  Render inside Streamlit 
 components.html(full_html, height=900, scrolling=True)
