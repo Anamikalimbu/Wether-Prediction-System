@@ -7,4 +7,3 @@ joblib==1.4.0
 nbformat==5.10.4
 flask==3.0.3
 gunicorn==22.0.0
-streamlit>=1.35.0
