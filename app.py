@@ -213,16 +213,17 @@ input[type="text"], input[type="search"] {{
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
+        <!-- UNIFIED SEARCH: native select works on ALL devices -->
+        <select id="city-select-all" class="city-select-unified" onchange="window.pickCity(this.value)">
+          <option value="" disabled>Select a city...</option>
+        </select>
+        <!-- Desktop text search overlay (hidden on touch) -->
         <div class="city-autocomplete-wrapper desktop-search">
-          <input type="text" id="city-input" placeholder="Search city..." value="{selected_city}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search"/>
+          <input type="text" id="city-input" placeholder="Type to search..." value="{selected_city}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search"/>
           <div class="city-dropdown" id="city-dropdown"></div>
         </div>
-        <div class="mobile-search" style="width: 100%;">
-          <select id="mobile-city-select" onchange="window.pickCity(this.value)">
-          </select>
-        </div>
       </div>
-      <button class="search-btn" id="search-btn">
+      <button class="search-btn" id="search-btn" onclick="window.searchCity()">
         🔍 Search
       </button>
     </div>
@@ -455,13 +456,17 @@ window.theme = '{theme}';
 // Also handle the default_city variable gracefully
 window.default_city = {default_city};
 
-// === POPULATE DATALIST & MOBILE SELECT ===
+// === POPULATE ALL CITY SELECTS ===
 (function() {{
-  const mSelect = document.getElementById('mobile-city-select');
-  if (mSelect) {{
-    mSelect.innerHTML = '<option value="" disabled>Tap to select a city...</option>' + 
-      CITIES_DATA.map(c => `<option value="${{c}}" ${{c === window.default_city ? 'selected' : ''}}>${{c}}</option>`).join('');
-  }}
+  // Populate the unified native select (works on ALL devices)
+  const allSelects = document.querySelectorAll('#city-select-all, #mobile-city-select');
+  const opts = '<option value="" disabled>Select a city...</option>' + 
+    CITIES_DATA.map(c => `<option value="${{c}}" ${{c === window.default_city ? 'selected' : ''}}>${{c}}</option>`).join('');
+  allSelects.forEach(s => {{ if(s) s.innerHTML = opts; }});
+
+  // If a default city is set, pre-select it
+  const unified = document.getElementById('city-select-all');
+  if (unified && window.default_city) unified.value = window.default_city;
 }})();
 
 // === RESTORE THEME ===

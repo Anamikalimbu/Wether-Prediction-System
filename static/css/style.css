@@ -281,7 +281,9 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: 12px;
   padding: 0.6rem 1rem;
-  flex: 0 0 280px;
+  flex: 1 1 280px;
+  min-width: 180px;
+  max-width: 360px;
   transition: border-color 0.2s;
   position: relative;
 }
@@ -320,9 +322,42 @@ body {
   width: 100%;
 }
 
+/* ---- Unified City Select (works on ALL screens) ---- */
+.city-select-unified {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: none; /* hidden by default; shown on touch devices */
+}
+
+.city-select-unified option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+/* Show unified select on ALL touch devices (phones, tablets, iPads) */
+@media (hover: none) and (pointer: coarse) {
+  .city-select-unified {
+    display: block;
+  }
+  .desktop-search {
+    display: none !important;
+  }
+}
+
 .search-box input::placeholder {
   color: var(--text-muted);
 }
+
 
 .search-icon {
   color: var(--accent-blue);
