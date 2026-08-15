@@ -764,9 +764,8 @@ function reloadData() {{
         `<div class="city-dropdown-item" data-city="${{c}}">${{c}}</div>`
       ).join('');
       dd.querySelectorAll('.city-dropdown-item').forEach(item => {{
-        // Use mousedown/touchstart so it fires immediately and prevents blur
-        item.addEventListener('mousedown', (e) => {{ e.preventDefault(); pickCity(item.dataset.city); }});
-        item.addEventListener('touchstart', (e) => {{ e.preventDefault(); pickCity(item.dataset.city); }});
+        // Use native click so mobile scrolling works normally
+        item.addEventListener('click', (e) => {{ pickCity(item.dataset.city); }});
       }});
     }}
     dd.classList.add('open');
@@ -806,16 +805,19 @@ function reloadData() {{
     _selectedFromDropdown = false;
     openDropdown(e.target.value);
   }});
-  cityInput.addEventListener('blur', () => {{
-    // Delay so mousedown/touchend on items can fire first
-    setTimeout(closeDropdown, 200);
-  }});
   cityInput.addEventListener('focus', (e) => {{
-    if (e.target.value.trim()) openDropdown(e.target.value);
+    openDropdown(e.target.value);
   }});
   cityInput.addEventListener('keydown', (e) => {{
     if (e.key === 'Enter') {{ closeDropdown(); searchCity(); }}
     if (e.key === 'Escape') closeDropdown();
+  }});
+
+  // Close dropdown when clicking anywhere outside the search wrapper
+  document.addEventListener('click', (e) => {{
+    if (!e.target.closest('.city-autocomplete-wrapper')) {{
+      closeDropdown();
+    }}
   }});
 
   document.getElementById('search-btn').addEventListener('click', () => {{ closeDropdown(); searchCity(); }});
