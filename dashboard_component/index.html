@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      overflow-x: hidden;
+      background: #0b1120;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    // Vanilla JS Streamlit Component Bridge (No CDN required)
+    function sendMessageToStreamlit(type, data) {
+      const outData = Object.assign({
+        isStreamlitMessage: true,
+        type: type,
+      }, data);
+      window.parent.postMessage(outData, "*");
+    }
+
+    function setFrameHeight() {
+      sendMessageToStreamlit("streamlit:setFrameHeight", { 
+        height: document.documentElement.scrollHeight || document.body.scrollHeight 
+      });
+    }
+
+    window.addEventListener("message", function(event) {
+      if (event.data.type === "streamlit:render") {
+        const args = event.data.args;
+        if (args.html_content) {
+            document.getElementById('root').innerHTML = args.html_content;
+            
+            // Execute scripts within the injected HTML in order
+            const scripts = document.getElementById('root').querySelectorAll('script');
+            scripts.forEach(oldScript => {
+              const newScript = document.createElement('script');
+              newScript.textContent = oldScript.textContent;
+              newScript.async = false; // Ensure scripts execute in order
+              oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+        }
+        
+        setTimeout(setFrameHeight, 100);
+        setTimeout(setFrameHeight, 500);
+        setTimeout(setFrameHeight, 1000);
+      }
+    });
+
+    // Tell Streamlit we are ready to receive data
+    sendMessageToStreamlit("streamlit:componentReady", { apiVersion: 1 });
+
+    // Global function called by the injected dashboard JS
+    window.sendCityToPython = function(city) {
+      sendMessageToStreamlit("streamlit:setComponentValue", { value: city });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: #0b1120;
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    #root {
+      width: 100%;
+    }
+    /* Ensure inputs are tappable and typeable on mobile */
+    input, button, select, textarea {
+      touch-action: manipulation;
+      -webkit-user-select: auto;
+      user-select: auto;
+      font-size: 16px !important; /* Prevents iOS zoom on focus */
+    }
+    /* Make sure the dropdown is tappable */
+    .city-dropdown-item {
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    window.onerror = function(msg, url, line, col, error) {
+      const errDiv = document.createElement('div');
+      errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;z-index:9999;padding:20px;font-size:18px;font-family:sans-serif;';
+      errDiv.innerHTML = '<b>CRITICAL JS ERROR:</b> ' + msg + '<br>Line: ' + line;
+      document.body.appendChild(errDiv);
+    };
+  </script>
+  <script>
+    // Vanilla JS Streamlit Component Bridge (No CDN required)
+    function sendMessageToStreamlit(type, data) {
+      const outData = Object.assign({
+        isStreamlitMessage: true,
+        type: type,
+      }, data);
+      window.parent.postMessage(outData, "*");
+    }
+
+    function setFrameHeight() {
+      const h = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight,
+        document.getElementById('root') ? document.getElementById('root').scrollHeight : 0
+      );
+      sendMessageToStreamlit("streamlit:setFrameHeight", { height: h });
+    }
+
+    window.addEventListener("message", function(event) {
+      if (event.data.type === "streamlit:render") {
+        const args = event.data.args;
+        if (args.html_content) {
+            document.getElementById('root').innerHTML = args.html_content;
+            
+            // Execute scripts within the injected HTML in order
+            const scripts = document.getElementById('root').querySelectorAll('script');
+            scripts.forEach(oldScript => {
+              const newScript = document.createElement('script');
+              newScript.textContent = oldScript.textContent;
+              newScript.async = false;
+              oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+        }
+        
+        // Fire multiple times to catch dynamic content (charts, etc.)
+        setFrameHeight();
+        setTimeout(setFrameHeight, 200);
+        setTimeout(setFrameHeight, 600);
+        setTimeout(setFrameHeight, 1500);
+        setTimeout(setFrameHeight, 3000);
+      }
+    });
+
+    // Tell Streamlit we are ready to receive data
+    sendMessageToStreamlit("streamlit:componentReady", { apiVersion: 1 });
+
+    // Global function called by the injected dashboard JS
+    window.sendCityToPython = function(city) {
+      sendMessageToStreamlit("streamlit:setComponentValue", { value: city, dataType: "json" });
+    }
+  </script>
+</body>
+</html>
