@@ -116,12 +116,10 @@ def get_trend_data(city):
                     if 'WindSpeed_10m' in city_df.columns else [2.0] * len(city_df)
     }
 
-# Get selected city from session state
-if 'selected_city' not in st.session_state:
-    default = 'Dharan Sub' if 'Dharan Sub' in cities else cities[0]
-    st.session_state.selected_city = default
-
-selected_city = st.session_state.selected_city
+# Get selected city from URL query params (enables search to work)
+_default_city = 'Dharan Sub' if 'Dharan Sub' in cities else cities[0]
+_city_param = st.query_params.get('city', _default_city)
+selected_city = _city_param if _city_param in cities else _default_city
 
 # Compute data server-side
 dash_data   = get_dashboard_data(selected_city)
@@ -716,18 +714,27 @@ document.addEventListener('DOMContentLoaded', () => {{
     }});
   }});
 
-  // Search
-  document.getElementById('search-btn').addEventListener('click', () => {{
+  // Search — navigate parent URL with ?city= so Streamlit rerenders with new data
+  function searchCity() {{
     const city = document.getElementById('city-input').value.trim();
-    if (city) {{
-      showToast('Searching for ' + city + '... Please reload the page after typing the city name.', 'info');
+    if (!city) return;
+    if (!CITIES_DATA.includes(city)) {{
+      showToast('⚠️ City "' + city + '" not found. Try autocomplete.', 'error');
+      return;
     }}
+    const url = new URL(window.parent.location.href);
+    url.searchParams.set('city', city);
+    window.parent.location.href = url.toString();
+  }}
+
+  document.getElementById('search-btn').addEventListener('click', searchCity);
+  document.getElementById('city-input').addEventListener('keydown', (e) => {{
+    if (e.key === 'Enter') searchCity();
   }});
+  // Auto-search when a valid city is selected from the datalist dropdown
   document.getElementById('city-input').addEventListener('change', (e) => {{
     const city = e.target.value.trim();
-    if (CITIES_DATA.includes(city)) {{
-      showToast('City selected: ' + city + '. Reload the page to see data.', 'info');
-    }}
+    if (CITIES_DATA.includes(city)) searchCity();
   }});
 
   // Close modals on overlay click
@@ -749,27 +756,21 @@ document.addEventListener('DOMContentLoaded', () => {{
   showPage('dashboard');
 }});
 </script>
+<script>
+// Auto-resize: tell Streamlit parent the exact content height
+function sendHeight() {{
+  const h = document.documentElement.scrollHeight || document.body.scrollHeight;
+  window.parent.postMessage({{type: 'streamlit:setFrameHeight', height: h}}, '*');
+}}
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+document.addEventListener('DOMContentLoaded', sendHeight);
+// Also send after nav clicks (content changes)
+setTimeout(sendHeight, 300);
+setTimeout(sendHeight, 800);
+</script>
 </body>
 </html>"""
 
 # Render at full height using components
-components.html(html, height=2200, scrolling=True)
-
-# --- City selector that triggers page reload ---
-st.markdown("---")
-st.markdown("### 🔍 Change City")
-st.caption("Select a city below to reload the dashboard with new data.")
-
-col1, col2 = st.columns([2, 1])
-with col1:
-    new_city = st.selectbox(
-        "Select City",
-        options=cities,
-        index=cities.index(selected_city) if selected_city in cities else 0,
-        key="city_selector"
-    )
-with col2:
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🔄 Load City Data", use_container_width=True):
-        st.session_state.selected_city = new_city
-        st.rerun()
+components.html(html, height=2200, scrolling=False)
