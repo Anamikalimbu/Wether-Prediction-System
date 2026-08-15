@@ -743,7 +743,7 @@ function reloadData() {{
   // Search — send city back to Streamlit via custom component API
   var _selectedFromDropdown = false;
 
-  function openDropdown(query) {{
+  window.openDropdown = function(query) {{
     const dd = document.getElementById('city-dropdown');
     if (!dd) return;
     const q = (query || '').toLowerCase().trim();
@@ -761,29 +761,25 @@ function reloadData() {{
       dd.innerHTML = '<div class="city-dropdown-empty">No cities found</div>';
     }} else {{
       dd.innerHTML = unique.map(c =>
-        `<div class="city-dropdown-item" data-city="${{c}}">${{c}}</div>`
+        `<div class="city-dropdown-item" data-city="${{c}}" onclick="window.pickCity('${{c.replace(/'/g, "\\'") }}')">${{c}}</div>`
       ).join('');
-      dd.querySelectorAll('.city-dropdown-item').forEach(item => {{
-        // Use native click so mobile scrolling works normally
-        item.addEventListener('click', (e) => {{ pickCity(item.dataset.city); }});
-      }});
     }}
     dd.classList.add('open');
   }}
 
-  function closeDropdown() {{
+  window.closeDropdown = function() {{
     const dd = document.getElementById('city-dropdown');
     if (dd) {{ dd.classList.remove('open'); dd.innerHTML = ''; }}
-  }}
+  }};
 
-  function pickCity(city) {{
+  window.pickCity = function(city) {{
     _selectedFromDropdown = true;
     document.getElementById('city-input').value = city;
-    closeDropdown();
-    triggerSearch(city);
-  }}
+    window.closeDropdown();
+    window.triggerSearch(city);
+  }};
 
-  function triggerSearch(cityOverride) {{
+  window.triggerSearch = function(cityOverride) {{
     const cityInput = cityOverride || document.getElementById('city-input').value.trim();
     if (!cityInput) return;
     const city = CITIES_DATA.find(c => c.toLowerCase() === cityInput.toLowerCase());
@@ -796,31 +792,31 @@ function reloadData() {{
     if (window.sendCityToPython) {{
       window.sendCityToPython(city);
     }}
-  }}
+  }};
 
-  function searchCity() {{ triggerSearch(); }}
+  window.searchCity = function() {{ window.triggerSearch(); }};
 
   const cityInput = document.getElementById('city-input');
   cityInput.addEventListener('input', (e) => {{
     _selectedFromDropdown = false;
-    openDropdown(e.target.value);
+    window.openDropdown(e.target.value);
   }});
   cityInput.addEventListener('focus', (e) => {{
-    openDropdown(e.target.value);
+    window.openDropdown(e.target.value);
   }});
   cityInput.addEventListener('keydown', (e) => {{
-    if (e.key === 'Enter') {{ closeDropdown(); searchCity(); }}
-    if (e.key === 'Escape') closeDropdown();
+    if (e.key === 'Enter') {{ window.closeDropdown(); window.searchCity(); }}
+    if (e.key === 'Escape') window.closeDropdown();
   }});
 
   // Close dropdown when clicking anywhere outside the search wrapper
   document.addEventListener('click', (e) => {{
     if (!e.target.closest('.city-autocomplete-wrapper')) {{
-      closeDropdown();
+      window.closeDropdown();
     }}
   }});
 
-  document.getElementById('search-btn').addEventListener('click', () => {{ closeDropdown(); searchCity(); }});
+  document.getElementById('search-btn').onclick = window.searchCity;
 
   // Close modals on overlay click
   document.querySelectorAll('.modal-overlay').forEach(el => {{
