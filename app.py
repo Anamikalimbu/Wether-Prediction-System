@@ -190,8 +190,10 @@ html, body {{
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="city-input" placeholder="Search city..." value="{selected_city}" list="cities-list" autocomplete="off"/>
-        <datalist id="cities-list"></datalist>
+        <div class="city-autocomplete-wrapper">
+          <input type="text" id="city-input" placeholder="Search city..." value="{selected_city}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search"/>
+          <div class="city-dropdown" id="city-dropdown"></div>
+        </div>
       </div>
       <button class="search-btn" id="search-btn">
         🔍 Search
@@ -428,12 +430,7 @@ window.default_city = {default_city};
 
 // === POPULATE DATALIST ===
 (function() {{
-  const dl = document.getElementById('cities-list');
-  CITIES_DATA.forEach(c => {{
-    const opt = document.createElement('option');
-    opt.value = c;
-    dl.appendChild(opt);
-  }});
+  // No longer using native datalist; handled by custom dropdown below
 }})();
 
 // === RESTORE THEME ===
@@ -721,15 +718,51 @@ function reloadData() {{
   }});
 
   // Search — send city back to Streamlit via custom component API
-  function searchCity() {{
-    const cityInput = document.getElementById('city-input').value.trim();
+  var _selectedFromDropdown = false;
+
+  function openDropdown(query) {{
+    const dd = document.getElementById('city-dropdown');
+    if (!dd) return;
+    const q = (query || '').toLowerCase().trim();
+    if (!q) {{ dd.innerHTML = ''; dd.classList.remove('open'); return; }}
+    const matches = CITIES_DATA.filter(c => c.toLowerCase().startsWith(q)).slice(0, 8)
+      .concat(CITIES_DATA.filter(c => !c.toLowerCase().startsWith(q) && c.toLowerCase().includes(q)).slice(0, 4));
+    const unique = [...new Set(matches)].slice(0, 10);
+    if (!unique.length) {{
+      dd.innerHTML = '<div class="city-dropdown-empty">No cities found</div>';
+    }} else {{
+      dd.innerHTML = unique.map(c =>
+        `<div class="city-dropdown-item" data-city="${{c}}">${{c}}</div>`
+      ).join('');
+      dd.querySelectorAll('.city-dropdown-item').forEach(item => {{
+        // Use mousedown/touchstart so it fires before blur
+        item.addEventListener('mousedown', (e) => {{ e.preventDefault(); pickCity(item.dataset.city); }});
+        item.addEventListener('touchend',  (e) => {{ e.preventDefault(); pickCity(item.dataset.city); }});
+      }});
+    }}
+    dd.classList.add('open');
+  }}
+
+  function closeDropdown() {{
+    const dd = document.getElementById('city-dropdown');
+    if (dd) {{ dd.classList.remove('open'); dd.innerHTML = ''; }}
+  }}
+
+  function pickCity(city) {{
+    _selectedFromDropdown = true;
+    document.getElementById('city-input').value = city;
+    closeDropdown();
+    triggerSearch(city);
+  }}
+
+  function triggerSearch(cityOverride) {{
+    const cityInput = cityOverride || document.getElementById('city-input').value.trim();
     if (!cityInput) return;
     const city = CITIES_DATA.find(c => c.toLowerCase() === cityInput.toLowerCase());
     if (!city) {{
       showToast('⚠️ City "' + cityInput + '" not found. Try autocomplete.', 'error');
       return;
     }}
-    // Update input to match the exact case from data
     document.getElementById('city-input').value = city;
     showToast('🔄 Loading ' + city + '...', 'info');
     if (window.sendCityToPython) {{
@@ -737,18 +770,26 @@ function reloadData() {{
     }}
   }}
 
-  document.getElementById('search-btn').addEventListener('click', searchCity);
-  document.getElementById('city-input').addEventListener('keydown', (e) => {{
-    if (e.key === 'Enter') searchCity();
+  function searchCity() {{ triggerSearch(); }}
+
+  const cityInput = document.getElementById('city-input');
+  cityInput.addEventListener('input', (e) => {{
+    _selectedFromDropdown = false;
+    openDropdown(e.target.value);
   }});
-  document.getElementById('city-input').addEventListener('change', (e) => {{
-    const cityInput = e.target.value.trim();
-    const city = CITIES_DATA.find(c => c.toLowerCase() === cityInput.toLowerCase());
-    if (city) {{
-      document.getElementById('city-input').value = city;
-      searchCity();
-    }}
+  cityInput.addEventListener('blur', () => {{
+    // Delay so mousedown/touchend on items can fire first
+    setTimeout(closeDropdown, 200);
   }});
+  cityInput.addEventListener('focus', (e) => {{
+    if (e.target.value.trim()) openDropdown(e.target.value);
+  }});
+  cityInput.addEventListener('keydown', (e) => {{
+    if (e.key === 'Enter') {{ closeDropdown(); searchCity(); }}
+    if (e.key === 'Escape') closeDropdown();
+  }});
+
+  document.getElementById('search-btn').addEventListener('click', () => {{ closeDropdown(); searchCity(); }});
 
   // Close modals on overlay click
   document.querySelectorAll('.modal-overlay').forEach(el => {{
