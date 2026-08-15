@@ -747,10 +747,16 @@ function reloadData() {{
     const dd = document.getElementById('city-dropdown');
     if (!dd) return;
     const q = (query || '').toLowerCase().trim();
-    if (!q) {{ dd.innerHTML = ''; dd.classList.remove('open'); return; }}
-    const matches = CITIES_DATA.filter(c => c.toLowerCase().startsWith(q)).slice(0, 8)
-      .concat(CITIES_DATA.filter(c => !c.toLowerCase().startsWith(q) && c.toLowerCase().includes(q)).slice(0, 4));
-    const unique = [...new Set(matches)].slice(0, 10);
+    
+    let unique = [];
+    if (!q) {{
+      unique = CITIES_DATA; // Show all 293 cities when empty
+    }} else {{
+      const matches = CITIES_DATA.filter(c => c.toLowerCase().startsWith(q))
+        .concat(CITIES_DATA.filter(c => !c.toLowerCase().startsWith(q) && c.toLowerCase().includes(q)));
+      unique = [...new Set(matches)]; // Show all matches, no slice limit
+    }}
+
     if (!unique.length) {{
       dd.innerHTML = '<div class="city-dropdown-empty">No cities found</div>';
     }} else {{
