@@ -1124,10 +1124,10 @@ body {
 
 .mobile-search { display: none; }
 
-/* ========== RESPONSIVENESS ========== */
+/* ========== RESPONSIVENESS & TOUCH DEVICES ========== */
 
-/* Tablet & Smaller Desktop */
-@media (max-width: 1024px) {
+/* Apply native select fallback to ALL touch devices (phones, iPads, tablets) */
+@media (hover: none) and (pointer: coarse), (max-width: 1024px) {
   .desktop-search { display: none !important; }
   .mobile-search { display: block; flex: 1; }
   
@@ -1147,7 +1147,10 @@ body {
     background: var(--bg-secondary);
     color: var(--text-primary);
   }
+}
 
+/* Tablet & Smaller Desktop Layout Tweaks */
+@media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
