@@ -22,9 +22,9 @@ st.set_page_config(
 # Hide all default Streamlit chrome
 st.markdown("""
 <style>
-header {visibility: hidden;}
-footer {visibility: hidden;}
-#MainMenu {visibility: hidden;}
+header {display: none !important; pointer-events: none !important;}
+footer {display: none !important; pointer-events: none !important;}
+#MainMenu {display: none !important;}
 [data-testid="stSidebar"] {display: none;}
 .block-container {padding: 0 !important; max-width: 100% !important;}
 .stApp {background: #0b1120;}
