@@ -755,19 +755,6 @@ document.addEventListener('DOMContentLoaded', () => {{
   showPage('dashboard');
 }});
 </script>
-<script>
-// Auto-resize: tell Streamlit parent the exact content height
-function sendHeight() {{
-  const h = document.documentElement.scrollHeight || document.body.scrollHeight;
-  window.parent.postMessage({{type: 'streamlit:setFrameHeight', height: h}}, '*');
-}}
-window.addEventListener('load', sendHeight);
-window.addEventListener('resize', sendHeight);
-document.addEventListener('DOMContentLoaded', sendHeight);
-// Also send after nav clicks (content changes)
-setTimeout(sendHeight, 300);
-setTimeout(sendHeight, 800);
-</script>
 """
 
 # ── Render via Custom Component ───────────────────────────────────────
