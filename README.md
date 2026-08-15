@@ -11,7 +11,7 @@ A complete Machine Learning Weather Prediction System suitable for an AI/ML inte
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://wether-prediction-system-umsuudkh3mqfthav8dxwqm.streamlit.app/)
 
 ✨ **No installation needed!** Access the live app directly in your browser.  
-**🔗 Link:** [https://wether-prediction-system-umsuudkh3mqfthav8dxwqm.streamlit.app/](https://wether-prediction-system-umsuudkh3mqfthav8dxwqm.streamlit.app/) 
+**🔗 Link:** [https://wether-prediction-system-umsuudkh3mqfthav8dxwqm.streamlit.app/](https://wether-prediction-system-umsuudkh3mqfthav8dxwqm.streamlit.app/) <br>
 **Status:** ✅ Live & Fully Functional  
 **Deployment:** Streamlit Cloud (automatic updates from GitHub)
 
