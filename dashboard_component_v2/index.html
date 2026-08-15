@@ -6,8 +6,12 @@
   <style>
     html, body {
       margin: 0; padding: 0;
-      overflow-x: hidden;
+      overflow: hidden;
       background: #0b1120;
+      width: 100%;
+    }
+    #root {
+      width: 100%;
     }
   </style>
 </head>
@@ -32,9 +36,12 @@
     }
 
     function setFrameHeight() {
-      sendMessageToStreamlit("streamlit:setFrameHeight", { 
-        height: document.documentElement.scrollHeight || document.body.scrollHeight 
-      });
+      const h = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight,
+        document.getElementById('root') ? document.getElementById('root').scrollHeight : 0
+      );
+      sendMessageToStreamlit("streamlit:setFrameHeight", { height: h });
     }
 
     window.addEventListener("message", function(event) {
@@ -48,14 +55,17 @@
             scripts.forEach(oldScript => {
               const newScript = document.createElement('script');
               newScript.textContent = oldScript.textContent;
-              newScript.async = false; // Ensure scripts execute in order
+              newScript.async = false;
               oldScript.parentNode.replaceChild(newScript, oldScript);
             });
         }
         
-        setTimeout(setFrameHeight, 100);
-        setTimeout(setFrameHeight, 500);
-        setTimeout(setFrameHeight, 1000);
+        // Fire multiple times to catch dynamic content (charts, etc.)
+        setFrameHeight();
+        setTimeout(setFrameHeight, 200);
+        setTimeout(setFrameHeight, 600);
+        setTimeout(setFrameHeight, 1500);
+        setTimeout(setFrameHeight, 3000);
       }
     });
 

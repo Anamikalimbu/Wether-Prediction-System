@@ -772,7 +772,7 @@ function reloadData() {{
 import os
 dashboard_path = os.path.join(os.path.dirname(__file__), "dashboard_component_v2")
 dashboard_comp = components.declare_component("dashboard_v2", path=dashboard_path)
-new_city = dashboard_comp(html_content=html, key=f"dash_{selected_city}")
+new_city = dashboard_comp(html_content=html, key=f"dash_{selected_city}", height=1800)
 
 if new_city and new_city != st.session_state.get('selected_city'):
     st.session_state.selected_city = new_city
