@@ -403,7 +403,7 @@ html, body {{
           <div class="theme-toggle-sub">Switch between dark and light appearance</div>
         </div>
         <label class="toggle-switch">
-          <input type="checkbox" id="theme-toggle">
+          <input type="checkbox" id="theme-toggle" onchange="applyTheme(this.checked ? 'light' : 'dark')">
           <span class="toggle-slider"></span>
         </label>
       </div>
