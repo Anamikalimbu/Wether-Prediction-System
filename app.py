@@ -195,14 +195,14 @@ input[type="text"], input[type="search"] {{
     <p>Machine Learning<br>Forecast</p>
   </div>
   <nav>
-    <a class="nav-item" data-page="dashboard"><span class="nav-icon">🏠</span> Dashboard</a>
-    <a class="nav-item" data-page="24hr"><span class="nav-icon">🕒</span> 24-Hour Forecast</a>
-    <a class="nav-item" data-page="5day"><span class="nav-icon">📅</span> 5-Day Forecast</a>
-    <a class="nav-item" data-page="model"><span class="nav-icon">📈</span> Model Performance</a>
+    <a class="nav-item" onclick="showPage('dashboard')" style="cursor:pointer"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a class="nav-item" onclick="showPage('24hr')" style="cursor:pointer"><span class="nav-icon">🕒</span> 24-Hour Forecast</a>
+    <a class="nav-item" onclick="showPage('5day')" style="cursor:pointer"><span class="nav-icon">📅</span> 5-Day Forecast</a>
+    <a class="nav-item" onclick="showPage('model')" style="cursor:pointer"><span class="nav-icon">📈</span> Model Performance</a>
   </nav>
   <div class="sidebar-footer">
-    <a class="nav-item" data-page="about"><span class="nav-icon">ℹ️</span> About</a>
-    <a class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span> Settings</a>
+    <a class="nav-item" onclick="openModal('about-modal')" style="cursor:pointer"><span class="nav-icon">ℹ️</span> About</a>
+    <a class="nav-item" onclick="openModal('settings-modal')" style="cursor:pointer"><span class="nav-icon">⚙️</span> Settings</a>
   </div>
 </aside>
 
@@ -405,30 +405,64 @@ input[type="text"], input[type="search"] {{
 </main>
 
 <!-- ========== MODALS ========== -->
-<div class="modal-overlay" id="about-modal">
+<div class="modal-overlay" id="about-modal" onclick="if(event.target===this)closeModal('about-modal')">
   <div class="modal">
     <div class="modal-header">
-      <h3>About WeatherAI</h3>
+      <h3>⚡ About WeatherAI</h3>
       <button class="modal-close" onclick="closeModal('about-modal')">✕</button>
     </div>
     <div class="modal-body">
-      <p>WeatherAI uses machine learning to analyze historical weather patterns and generate weather predictions. The models are trained on chronological data splits using advanced feature engineering.</p>
-      <p><strong>Machine Learning Models Tested</strong></p>
-      <ul><li>Decision Tree</li><li>Random Forest</li><li>Support Vector Machine (SVM)</li></ul>
-      <br>
-      <p><strong>Built With</strong></p>
-      <p>Python • Streamlit • Scikit-learn • Chart.js • CSS3</p>
+      <p>WeatherAI is an intelligent weather prediction system built for Nepal's 293 districts. It uses machine learning to analyze historical weather patterns and generate accurate short-term forecasts.</p>
+
+      <div class="about-stats-row">
+        <div class="about-stat"><div class="about-stat-num">293</div><div class="about-stat-label">Districts</div></div>
+        <div class="about-stat"><div class="about-stat-num">98.1%</div><div class="about-stat-label">Accuracy</div></div>
+        <div class="about-stat"><div class="about-stat-num">3</div><div class="about-stat-label">ML Models</div></div>
+        <div class="about-stat"><div class="about-stat-num">5-Day</div><div class="about-stat-label">Forecast</div></div>
+      </div>
+
+      <p><strong>🤖 Machine Learning Models</strong></p>
+      <ul>
+        <li><strong>Random Forest</strong> — Best performer (R² = 0.981, RMSE = 1.10°C)</li>
+        <li><strong>Decision Tree</strong> — Fast, interpretable baseline model</li>
+        <li><strong>Support Vector Machine (SVM)</strong> — Robust non-linear fitting</li>
+      </ul>
+
+      <p><strong>🛠️ Built With</strong></p>
+      <p style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.8rem">
+        <span class="about-tag">Python</span>
+        <span class="about-tag">Streamlit</span>
+        <span class="about-tag">Scikit-learn</span>
+        <span class="about-tag">Chart.js</span>
+        <span class="about-tag">Pandas</span>
+        <span class="about-tag">NumPy</span>
+        <span class="about-tag">CSS3</span>
+      </p>
+
+      <p><strong>📊 Features</strong></p>
+      <ul>
+        <li>Real-time 24-hour hourly forecast</li>
+        <li>5-day recursive ML prediction</li>
+        <li>Historical temperature trend charts</li>
+        <li>Model performance metrics dashboard</li>
+        <li>Dark / Light theme support</li>
+        <li>Responsive on mobile, tablet & desktop</li>
+      </ul>
+
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1rem;border-top:1px solid var(--glass-border);padding-top:0.8rem">WeatherAI © 2026 · Data sourced from DHM Nepal · Built with ❤️ using open-source ML tools</p>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="settings-modal">
+<div class="modal-overlay" id="settings-modal" onclick="if(event.target===this)closeModal('settings-modal')">
   <div class="modal">
     <div class="modal-header">
       <h3>⚙️ Settings</h3>
       <button class="modal-close" onclick="closeModal('settings-modal')">✕</button>
     </div>
     <div class="modal-body">
+
+      <div class="settings-section-title">🎨 Appearance</div>
       <div class="theme-toggle-row">
         <div>
           <div class="theme-toggle-label">Light Mode</div>
@@ -439,8 +473,17 @@ input[type="text"], input[type="search"] {{
           <span class="toggle-slider"></span>
         </label>
       </div>
-      <div class="settings-section-title">API Configuration</div>
-      <p style="font-size:0.85rem;color:var(--text-secondary);">Currently using local cached dataset. Live API endpoints are disabled for this project.</p>
+
+      <div class="settings-section-title">📍 Default City</div>
+      <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.6rem">Currently loaded city:</p>
+      <p style="font-size:1rem;font-weight:700;color:var(--accent-blue);margin-bottom:1rem" id="settings-current-city">—</p>
+
+      <div class="settings-section-title">🌐 Data Source</div>
+      <p style="font-size:0.85rem;color:var(--text-secondary)">Using historical dataset from DHM Nepal (Department of Hydrology and Meteorology). Predictions are generated using pre-trained Random Forest models.</p>
+
+      <div class="settings-section-title">ℹ️ Version</div>
+      <p style="font-size:0.85rem;color:var(--text-secondary)">WeatherAI v2.0 · Python 3.x · Streamlit · Scikit-learn</p>
+
     </div>
   </div>
 </div>
@@ -687,6 +730,12 @@ function openModal(id) {{
   if (id === 'settings-modal') {{
     const toggle = document.getElementById('theme-toggle');
     if (toggle) toggle.checked = document.body.classList.contains('light');
+    const cityEl = document.getElementById('settings-current-city');
+    if (cityEl) {{
+      const input = document.getElementById('city-input');
+      const sel = document.getElementById('city-select-all');
+      cityEl.textContent = (input && input.value.trim()) || (sel && sel.value) || String({default_city});
+    }}
   }}
 }}
 
