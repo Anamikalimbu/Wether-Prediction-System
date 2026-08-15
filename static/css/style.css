@@ -1122,10 +1122,32 @@ body {
   background: var(--accent-blue);
 }
 
+.mobile-search { display: none; }
+
 /* ========== RESPONSIVENESS ========== */
 
 /* Tablet & Smaller Desktop */
 @media (max-width: 1024px) {
+  .desktop-search { display: none !important; }
+  .mobile-search { display: block; flex: 1; }
+  
+  .mobile-search select {
+    width: 100%;
+    padding: 0.2rem 0;
+    background: transparent;
+    color: var(--text-primary);
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  
+  .mobile-search select option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
   .dashboard-grid {
     grid-template-columns: 1fr;
   }

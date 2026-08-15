@@ -213,9 +213,13 @@ input[type="text"], input[type="search"] {{
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <div class="city-autocomplete-wrapper">
+        <div class="city-autocomplete-wrapper desktop-search">
           <input type="text" id="city-input" placeholder="Search city..." value="{selected_city}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search"/>
           <div class="city-dropdown" id="city-dropdown"></div>
+        </div>
+        <div class="mobile-search" style="width: 100%;">
+          <select id="mobile-city-select" onchange="window.pickCity(this.value)">
+          </select>
         </div>
       </div>
       <button class="search-btn" id="search-btn">
@@ -451,9 +455,13 @@ window.theme = '{theme}';
 // Also handle the default_city variable gracefully
 window.default_city = {default_city};
 
-// === POPULATE DATALIST ===
+// === POPULATE DATALIST & MOBILE SELECT ===
 (function() {{
-  // No longer using native datalist; handled by custom dropdown below
+  const mSelect = document.getElementById('mobile-city-select');
+  if (mSelect) {{
+    mSelect.innerHTML = '<option value="" disabled>Tap to select a city...</option>' + 
+      CITIES_DATA.map(c => `<option value="${{c}}" ${{c === window.default_city ? 'selected' : ''}}>${{c}}</option>`).join('');
+  }}
 }})();
 
 // === RESTORE THEME ===
@@ -788,6 +796,9 @@ function reloadData() {{
       return;
     }}
     document.getElementById('city-input').value = city;
+    const mSelect = document.getElementById('mobile-city-select');
+    if (mSelect) mSelect.value = city;
+    
     showToast('🔄 Loading ' + city + '...', 'info');
     if (window.sendCityToPython) {{
       window.sendCityToPython(city);
