@@ -224,7 +224,7 @@ input[type="text"], input[type="search"] {{
         </div>
       </div>
       <button class="search-btn" id="search-btn" onclick="window.searchCity()">
-        🔍 Search
+        Search
       </button>
     </div>
     <div class="topbar-actions">
