@@ -28,6 +28,19 @@ footer {visibility: hidden;}
 [data-testid="stSidebar"] {display: none;}
 .block-container {padding: 0 !important; max-width: 100% !important;}
 .stApp {background: #0b1120;}
+
+/* Fix iframe touch on mobile */
+iframe {
+  width: 100% !important;
+  border: none !important;
+  pointer-events: auto !important;
+  touch-action: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+[data-testid="stCustomComponentV1"] {
+  width: 100% !important;
+  overflow: visible !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -162,6 +175,16 @@ html, body {{
   margin: 0; padding: 0;
   overflow-x: hidden;
   background: #0b1120;
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
+}}
+
+/* Mobile input fix — ensure inputs are interactive inside iframe */
+input[type="text"], input[type="search"] {{
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: manipulation;
+  font-size: 16px; /* Prevents iOS auto-zoom */
 }}
 </style>
 

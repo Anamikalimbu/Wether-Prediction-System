@@ -2,16 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     html, body {
       margin: 0; padding: 0;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       background: #0b1120;
       width: 100%;
+      -webkit-overflow-scrolling: touch;
     }
     #root {
       width: 100%;
+    }
+    /* Ensure inputs are tappable and typeable on mobile */
+    input, button, select, textarea {
+      touch-action: manipulation;
+      -webkit-user-select: auto;
+      user-select: auto;
+      font-size: 16px !important; /* Prevents iOS zoom on focus */
+    }
+    /* Make sure the dropdown is tappable */
+    .city-dropdown-item {
+      touch-action: manipulation;
+      cursor: pointer;
     }
   </style>
 </head>
