@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/streamlit-component-lib@1.3.0/dist/streamlit.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      overflow-x: hidden;
+      background: #0b1120;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    function onRender(event) {
+      const args = event.detail.args;
+      if (args.html_content) {
+          document.getElementById('root').innerHTML = args.html_content;
+          
+          // Execute scripts within the injected HTML
+          const scripts = document.getElementById('root').querySelectorAll('script');
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement('script');
+            newScript.textContent = oldScript.textContent;
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+          });
+      }
+      
+      const updateHeight = () => Streamlit.setFrameHeight(document.documentElement.scrollHeight);
+      setTimeout(updateHeight, 100);
+      setTimeout(updateHeight, 500);
+      setTimeout(updateHeight, 1000);
+    }
+    Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, onRender);
+    Streamlit.setComponentReady();
+
+    // Global function called by the injected dashboard JS
+    window.sendCityToPython = function(city) {
+      Streamlit.setComponentValue(city);
+    }
+  </script>
+</body>
+</html>

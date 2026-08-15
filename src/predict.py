@@ -24,9 +24,14 @@ else:
 # For simplicity in this internship project, if they ask for a future date, we take the *latest* available data
 # for that city, pretend it's the "day before", and predict. If it's a historical date, we just look up the actuals.
 
+_cached_df = None
+
 def get_latest_city_data(city_name):
-    # We load the data directly for simplicity. In production, this would be cached.
-    df = pd.read_csv(DATA_PATH)
+    global _cached_df
+    if _cached_df is None:
+        _cached_df = pd.read_csv(DATA_PATH)
+        
+    df = _cached_df
     city_df = df[df['City'] == city_name].copy()
     
     if city_df.empty:

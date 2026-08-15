@@ -116,10 +116,14 @@ def get_trend_data(city):
                     if 'WindSpeed_10m' in city_df.columns else [2.0] * len(city_df)
     }
 
-# Get selected city from URL query params (enables search to work)
-_default_city = 'Dharan Sub' if 'Dharan Sub' in cities else cities[0]
-_city_param = st.query_params.get('city', _default_city)
-selected_city = _city_param if _city_param in cities else _default_city
+# Get selected city — from query params OR session state (postMessage bridge updates session state)
+if 'selected_city' not in st.session_state:
+    _default_city = 'Dharan Sub' if 'Dharan Sub' in cities else cities[0]
+    st.session_state.selected_city = st.query_params.get('city', _default_city)
+    if st.session_state.selected_city not in cities:
+        st.session_state.selected_city = _default_city
+
+selected_city = st.session_state.selected_city
 
 # Compute data server-side
 dash_data   = get_dashboard_data(selected_city)
@@ -148,15 +152,8 @@ with open(css_path, 'r', encoding='utf-8') as f:
 with open(js_path, 'r', encoding='utf-8') as f:
     js_content = f.read()
 
-# Build the full HTML page
-html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>WeatherAI</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
+# Build the inner HTML content
+html = f"""<style>
 {css_content}
 
 /* Streamlit iframe reset */
@@ -166,8 +163,6 @@ html, body {{
   background: #0b1120;
 }}
 </style>
-</head>
-<body>
 
 <!-- ========== SIDEBAR ========== -->
 <aside class="sidebar">
@@ -675,9 +670,10 @@ function applyTheme(theme) {{
 
 function reloadData() {{
   const city = document.getElementById('city-input').value.trim() || {default_city};
-  const url = new URL(window.parent.location.href);
-  url.searchParams.set('city', city);
-  window.parent.location.href = url.toString();
+  showToast('🔄 Refreshing ' + city + '...', 'info');
+  if (window.sendCityToPython) {{
+    window.sendCityToPython(city);
+  }}
 }}
 
 // === INIT ===
@@ -717,7 +713,7 @@ document.addEventListener('DOMContentLoaded', () => {{
     }});
   }});
 
-  // Search — navigate parent URL with ?city= so Streamlit rerenders with new data
+  // Search — send city back to Streamlit via custom component API
   function searchCity() {{
     const city = document.getElementById('city-input').value.trim();
     if (!city) return;
@@ -725,16 +721,16 @@ document.addEventListener('DOMContentLoaded', () => {{
       showToast('⚠️ City "' + city + '" not found. Try autocomplete.', 'error');
       return;
     }}
-    const url = new URL(window.parent.location.href);
-    url.searchParams.set('city', city);
-    window.parent.location.href = url.toString();
+    showToast('🔄 Loading ' + city + '...', 'info');
+    if (window.sendCityToPython) {{
+      window.sendCityToPython(city);
+    }}
   }}
 
   document.getElementById('search-btn').addEventListener('click', searchCity);
   document.getElementById('city-input').addEventListener('keydown', (e) => {{
     if (e.key === 'Enter') searchCity();
   }});
-  // Auto-search when a valid city is selected from the datalist dropdown
   document.getElementById('city-input').addEventListener('change', (e) => {{
     const city = e.target.value.trim();
     if (CITIES_DATA.includes(city)) searchCity();
@@ -772,8 +768,17 @@ document.addEventListener('DOMContentLoaded', sendHeight);
 setTimeout(sendHeight, 300);
 setTimeout(sendHeight, 800);
 </script>
-</body>
-</html>"""
+"""
 
-# Render using st.iframe (replaces deprecated components.html)
-st.iframe(srcdoc=html, height=2200, scrolling=False)
+# ── Render via Custom Component ───────────────────────────────────────
+# The component wrapper handles rendering the HTML and provides 
+# bidirectional communication with Streamlit.
+import os
+dashboard_path = os.path.join(os.path.dirname(__file__), "dashboard_component")
+dashboard_comp = components.declare_component("dashboard", path=dashboard_path)
+new_city = dashboard_comp(html_content=html, key=f"dash_{selected_city}")
+
+if new_city and new_city != st.session_state.get('selected_city'):
+    st.session_state.selected_city = new_city
+    st.query_params['city'] = new_city
+    st.rerun()
