@@ -187,14 +187,16 @@ html, body {{
 <main class="main">
   <!-- TOP BAR -->
   <header class="topbar">
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="city-input" placeholder="Search city..." value="{selected_city}" list="cities-list" autocomplete="off"/>
-      <datalist id="cities-list"></datalist>
+    <div class="search-container">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="city-input" placeholder="Search city..." value="{selected_city}" list="cities-list" autocomplete="off"/>
+        <datalist id="cities-list"></datalist>
+      </div>
+      <button class="search-btn" id="search-btn">
+        🔍 Search
+      </button>
     </div>
-    <button class="search-box" id="search-btn" style="border:1px solid var(--accent-blue);background:rgba(56,189,248,0.12);padding:0.6rem 1rem;cursor:pointer;gap:6px;color:var(--accent-blue);font-family:Inter,sans-serif;font-size:0.9rem;font-weight:600;">
-      🔍 Search
-    </button>
     <div class="topbar-actions">
       <button class="topbar-btn" title="Refresh" onclick="reloadData()">🔄</button>
       <button class="topbar-btn" id="theme-btn" title="Theme">🌙</button>
