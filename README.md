@@ -9,6 +9,7 @@ A complete Machine Learning Weather Prediction System suitable for an AI/ML inte
 **Try it now:** 
 
 ✨ **No installation needed!** Access the live app directly in your browser.  
+**Link:** (https://wether-prediction-system-umsuudkh3mqfthav8dxwqm.streamlit.app/)
 **Status:** ✅ Live & Fully Functional  
 **Deployment:** Streamlit Cloud (automatic updates from GitHub)
 
