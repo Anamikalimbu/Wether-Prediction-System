@@ -758,9 +758,9 @@ function reloadData() {{
         `<div class="city-dropdown-item" data-city="${{c}}">${{c}}</div>`
       ).join('');
       dd.querySelectorAll('.city-dropdown-item').forEach(item => {{
-        // Use mousedown/touchstart so it fires before blur
+        // Use mousedown/touchstart so it fires immediately and prevents blur
         item.addEventListener('mousedown', (e) => {{ e.preventDefault(); pickCity(item.dataset.city); }});
-        item.addEventListener('touchend',  (e) => {{ e.preventDefault(); pickCity(item.dataset.city); }});
+        item.addEventListener('touchstart', (e) => {{ e.preventDefault(); pickCity(item.dataset.city); }});
       }});
     }}
     dd.classList.add('open');
