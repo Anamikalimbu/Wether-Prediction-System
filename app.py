@@ -23,102 +23,102 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --bg-primary: #0b1120;
-    --bg-secondary: #0f172a;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --accent-primary: #38bdf8;
-    --glass-bg: rgba(15, 23, 42, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.08);
+--bg-primary: #0b1120;
+--bg-secondary: #0f172a;
+--text-primary: #f8fafc;
+--text-secondary: #94a3b8;
+--accent-primary: #38bdf8;
+--glass-bg: rgba(15, 23, 42, 0.6);
+--glass-border: rgba(255, 255, 255, 0.08);
 }
 
 * { font-family: 'Inter', sans-serif; }
 
 .stApp {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+background-color: var(--bg-primary);
+color: var(--text-primary);
 }
 
 /* Hide header and footer */
 header {visibility: hidden;}
 footer {visibility: hidden;}
 .block-container {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
+padding-top: 2rem !important;
+padding-bottom: 2rem !important;
 }
 
 /* Sidebar styling */
 .css-1d391kg, [data-testid="stSidebar"] {
-    background-color: var(--bg-secondary) !important;
-    border-right: 1px solid var(--glass-border);
+background-color: var(--bg-secondary) !important;
+border-right: 1px solid var(--glass-border);
 }
 
 /* Hero Section */
 .hero-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 2.5rem;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 2rem;
+background: var(--glass-bg);
+border: 1px solid var(--glass-border);
+border-radius: 24px;
+padding: 2.5rem;
+position: relative;
+overflow: hidden;
+margin-bottom: 2rem;
 }
 .hero-card::before {
-    content: '';
-    position: absolute;
-    top: -20%; right: -10%;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
+content: '';
+position: absolute;
+top: -20%; right: -10%;
+width: 300px; height: 300px;
+background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+border-radius: 50%;
+pointer-events: none;
 }
 
 .hero-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
 }
 .hero-city { font-size: 1.8rem; font-weight: 700; margin: 0; line-height: 1.2; }
 .hero-date { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
 
 .badge-ai {
-    background: rgba(139, 92, 246, 0.15);
-    color: #a78bfa;
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    padding: 0.25rem 0.75rem;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 600;
+background: rgba(139, 92, 246, 0.15);
+color: #a78bfa;
+border: 1px solid rgba(139, 92, 246, 0.3);
+padding: 0.25rem 0.75rem;
+border-radius: 99px;
+font-size: 0.75rem;
+font-weight: 600;
 }
 
 .temp-container {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+display: flex;
+align-items: center;
+gap: 1.5rem;
+margin-top: 2rem;
+margin-bottom: 2rem;
 }
 .weather-icon { font-size: 4.5rem; line-height: 1; }
 .temp-value { font-size: 4.5rem; font-weight: 800; line-height: 1; margin: 0; }
 .temp-condition { font-size: 1.1rem; color: var(--text-secondary); margin: 0; }
 
 .bottom-metrics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    border-top: 1px solid var(--glass-border);
-    padding-top: 1.5rem;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1rem;
+border-top: 1px solid var(--glass-border);
+padding-top: 1.5rem;
 }
 .metric-box {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+display: flex;
+align-items: center;
+gap: 1rem;
 }
 .metric-icon-box {
-    width: 40px; height: 40px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
+width: 40px; height: 40px;
+border-radius: 8px;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.2rem;
 }
 .mi-hum { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
 .mi-wind { background: rgba(167, 139, 250, 0.1); color: #a78bfa; }
@@ -129,52 +129,52 @@ footer {visibility: hidden;}
 
 /* AI Insight Box */
 .insight-box {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 2rem;
-    height: 100%;
+background: var(--glass-bg);
+border: 1px solid var(--glass-border);
+border-radius: 24px;
+padding: 2rem;
+height: 100%;
 }
 .insight-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 1rem;
+display: flex; justify-content: space-between; align-items: center;
+margin-bottom: 1rem;
 }
 .insight-header h3 { font-size: 1.1rem; font-weight: 600; margin: 0; color: #38bdf8;}
 .insight-tags { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;}
 .insight-tag {
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    color: var(--accent-primary);
-    padding: 0.2rem 0.6rem;
-    border-radius: 99px;
-    font-size: 0.75rem;
+background: rgba(56, 189, 248, 0.1);
+border: 1px solid rgba(56, 189, 248, 0.25);
+color: var(--accent-primary);
+padding: 0.2rem 0.6rem;
+border-radius: 99px;
+font-size: 0.75rem;
 }
 .insight-text { color: var(--text-secondary); line-height: 1.6; font-size: 0.9rem; }
 
 /* Carousel */
 .carousel-container {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 1.5rem;
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    margin-bottom: 2rem;
-    margin-top: 1rem;
+background: var(--glass-bg);
+border: 1px solid var(--glass-border);
+border-radius: 24px;
+padding: 1.5rem;
+display: flex;
+gap: 1rem;
+overflow-x: auto;
+margin-bottom: 2rem;
+margin-top: 1rem;
 }
 .carousel-container::-webkit-scrollbar { height: 8px; }
 .carousel-container::-webkit-scrollbar-track { background: transparent; }
 .carousel-container::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
 
 .hour-card {
-    min-width: 100px;
-    padding: 1rem;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    flex-shrink: 0;
+min-width: 100px;
+padding: 1rem;
+background: rgba(255,255,255,0.03);
+border: 1px solid var(--glass-border);
+border-radius: 16px;
+display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+flex-shrink: 0;
 }
 .hour-time { font-size: 0.8rem; color: var(--text-secondary); }
 .hour-icon { font-size: 1.5rem; }
@@ -183,13 +183,13 @@ footer {visibility: hidden;}
 
 /* 5 Day Forecast */
 .day-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 1.5rem 1rem;
-    text-align: center;
-    display: flex; flex-direction: column; gap: 0.8rem;
-    height: 100%;
+background: var(--glass-bg);
+border: 1px solid var(--glass-border);
+border-radius: 16px;
+padding: 1.5rem 1rem;
+text-align: center;
+display: flex; flex-direction: column; gap: 0.8rem;
+height: 100%;
 }
 .day-name { font-weight: 700; font-size: 1rem; color: white; letter-spacing: 1px; }
 .day-date { font-size: 0.75rem; color: var(--text-secondary); }
@@ -200,21 +200,21 @@ footer {visibility: hidden;}
 
 /* Performance */
 .perf-container {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 2.5rem;
-    text-align: center;
-    margin-top: 1rem;
+background: var(--glass-bg);
+border: 1px solid var(--glass-border);
+border-radius: 24px;
+padding: 2.5rem;
+text-align: center;
+margin-top: 1rem;
 }
 .perf-title { font-size: 0.9rem; color: var(--text-secondary); letter-spacing: 1px; text-transform: uppercase; }
 .perf-model { font-size: 1.5rem; font-weight: 700; color: #38bdf8; margin-bottom: 2rem; }
 .perf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .perf-stat {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 1.5rem;
+background: rgba(255,255,255,0.03);
+border: 1px solid var(--glass-border);
+border-radius: 16px;
+padding: 1.5rem;
 }
 .perf-stat h4 { margin: 0; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; }
 .perf-stat h2 { margin: 0; font-size: 2.5rem; font-weight: 800; color: white; }
@@ -294,78 +294,78 @@ def render_hero():
     
     with col1:
         date_str = datetime.today().strftime('%A, %B %d')
-        st.markdown(textwrap.dedent(f"""
-        <div class="hero-card">
-            <div class="hero-header">
-                <div>
-                    <h1 class="hero-city">{selected_city}</h1>
-                    <p class="hero-date">{date_str}</p>
-                </div>
-                <span class="badge-ai">✨ AI FORECAST</span>
-            </div>
-            
-            <div class="temp-container">
-                <span class="weather-icon">{icon}</span>
-                <div>
-                    <h1 class="temp-value">{temp:.0f}°</h1>
-                    <p class="temp-condition">{condition}</p>
-                </div>
-            </div>
-            
-            <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 1rem;">
-                <span style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 12px; margin-right: 10px;">👁️ Observed Data</span>
-                <span style="float: right;">Powered by Machine Learning</span>
-            </div>
-            
-            <div class="bottom-metrics">
-                <div class="metric-box">
-                    <div class="metric-icon-box mi-hum">💧</div>
-                    <div class="metric-text"><p>Humidity</p><h4>{hum:.1f}%</h4></div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-icon-box mi-wind">💨</div>
-                    <div class="metric-text"><p>Wind Speed</p><h4>{wind} km/h</h4></div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-icon-box mi-press">⏱️</div>
-                    <div class="metric-text"><p>Pressure</p><h4>{press} hPa</h4></div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-icon-box mi-prec">🌧️</div>
-                    <div class="metric-text"><p>Precipitation</p><h4>{prec:.0f}%</h4></div>
-                </div>
-            </div>
-        </div>
-        """), unsafe_allow_html=True)
+        st.markdown(f"""
+<div class="hero-card">
+<div class="hero-header">
+<div>
+<h1 class="hero-city">{selected_city}</h1>
+<p class="hero-date">{date_str}</p>
+</div>
+<span class="badge-ai">✨ AI FORECAST</span>
+</div>
+
+<div class="temp-container">
+<span class="weather-icon">{icon}</span>
+<div>
+<h1 class="temp-value">{temp:.0f}°</h1>
+<p class="temp-condition">{condition}</p>
+</div>
+</div>
+
+<div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 1rem;">
+<span style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 12px; margin-right: 10px;">👁️ Observed Data</span>
+<span style="float: right;">Powered by Machine Learning</span>
+</div>
+
+<div class="bottom-metrics">
+<div class="metric-box">
+<div class="metric-icon-box mi-hum">💧</div>
+<div class="metric-text"><p>Humidity</p><h4>{hum:.1f}%</h4></div>
+</div>
+<div class="metric-box">
+<div class="metric-icon-box mi-wind">💨</div>
+<div class="metric-text"><p>Wind Speed</p><h4>{wind} km/h</h4></div>
+</div>
+<div class="metric-box">
+<div class="metric-icon-box mi-press">⏱️</div>
+<div class="metric-text"><p>Pressure</p><h4>{press} hPa</h4></div>
+</div>
+<div class="metric-box">
+<div class="metric-icon-box mi-prec">🌧️</div>
+<div class="metric-text"><p>Precipitation</p><h4>{prec:.0f}%</h4></div>
+</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
         
     with col2:
-        st.markdown(textwrap.dedent(f"""
-        <div class="insight-box">
-            <div class="insight-header">
-                <h3>✨ AI Weather Insight</h3>
-                <span style="background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; color: #94a3b8;">Generating...</span>
-            </div>
-            <div class="insight-tags">
-                <span class="insight-tag">☁️ Monsoon</span>
-                <span class="insight-tag">⛅ Partly Cloudy</span>
-                <span class="insight-tag">🌡️ {temp:.1f}°C</span>
-                <span class="insight-tag">💧 {prec:.0f}% rain</span>
-            </div>
-            <p class="insight-text">
-                A mix of clouds and breaks of sunshine is forecast for {selected_city}. Temperatures will be warm, reaching up to {temp+3.8:.1f}°C with a minimum of {temp-4.2:.1f}°C. Precipitation probability is minimal at just {prec:.0f}%. Outdoor activities should be largely unaffected by rain. The air is notably dry at {hum:.0f}% relative humidity — keeping hydrated will be especially important. Winds will be light and calm at {wind} km/h, providing still conditions. As Nepal is in the heart of the monsoon season, weather can shift rapidly. Monitor forecasts frequently.
-            </p>
-        </div>
-        """), unsafe_allow_html=True)
+        st.markdown(f"""
+<div class="insight-box">
+<div class="insight-header">
+<h3>✨ AI Weather Insight</h3>
+<span style="background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; color: #94a3b8;">Generating...</span>
+</div>
+<div class="insight-tags">
+<span class="insight-tag">☁️ Monsoon</span>
+<span class="insight-tag">⛅ Partly Cloudy</span>
+<span class="insight-tag">🌡️ {temp:.1f}°C</span>
+<span class="insight-tag">💧 {prec:.0f}% rain</span>
+</div>
+<p class="insight-text">
+A mix of clouds and breaks of sunshine is forecast for {selected_city}. Temperatures will be warm, reaching up to {temp+3.8:.1f}°C with a minimum of {temp-4.2:.1f}°C. Precipitation probability is minimal at just {prec:.0f}%. Outdoor activities should be largely unaffected by rain. The air is notably dry at {hum:.0f}% relative humidity — keeping hydrated will be especially important. Winds will be light and calm at {wind} km/h, providing still conditions. As Nepal is in the heart of the monsoon season, weather can shift rapidly. Monitor forecasts frequently.
+</p>
+</div>
+""", unsafe_allow_html=True)
 
 def render_24hr():
     # 2. NEXT 24 HOURS
-    st.markdown(textwrap.dedent("""
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <h3 style="margin: 0; color: white;">Next 24 Hours</h3>
-        <span class="badge-ai" style="font-size: 0.65rem; padding: 2px 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">ML Prediction</span>
-    </div>
-    <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">Mathematically generated diurnal curve from daily ML predictions.</p>
-    """), unsafe_allow_html=True)
+    st.markdown(f"""
+<div style="display: flex; align-items: center; gap: 10px;">
+<h3 style="margin: 0; color: white;">Next 24 Hours</h3>
+<span class="badge-ai" style="font-size: 0.65rem; padding: 2px 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">ML Prediction</span>
+</div>
+<p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">Mathematically generated diurnal curve from daily ML predictions.</p>
+""", unsafe_allow_html=True)
     
     # Generate 8 hours of mock forecast
     hours_html = ""
@@ -376,14 +376,14 @@ def render_24hr():
         ampm = "AM" if h < 12 else "PM"
         dh = h if h <= 12 else h - 12
         r = np.random.uniform(5, 20)
-        hours_html += textwrap.dedent(f"""
-        <div class="hour-card">
-            <span class="hour-time">{dh}:00 {ampm}</span>
-            <span class="hour-icon">⛅</span>
-            <span class="hour-temp">{t:.0f}°</span>
-            <span class="hour-rain">💧 {r:.1f}%</span>
-        </div>
-        """)
+        hours_html += f"""
+<div class="hour-card">
+    <span class="hour-time">{dh}:00 {ampm}</span>
+    <span class="hour-icon">⛅</span>
+    <span class="hour-temp">{t:.0f}°</span>
+    <span class="hour-rain">💧 {r:.1f}%</span>
+</div>
+"""
         if i < 4: t += 1
         else: t -= 0.5
         
@@ -391,11 +391,11 @@ def render_24hr():
 
 def render_trends():
     # 3. WEATHER TRENDS
-    st.markdown(textwrap.dedent("""
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; margin-bottom: -2rem;">
-        <h3 style="color: white; z-index: 10;">Weather Trends</h3>
-    </div>
-    """), unsafe_allow_html=True)
+    st.markdown(f"""
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; margin-bottom: -2rem;">
+<h3 style="color: white; z-index: 10;">Weather Trends</h3>
+</div>
+""", unsafe_allow_html=True)
     
     # Generate mock trend data mimicking the screenshot
     trend_x = [f"{i}:00 {'AM' if i<12 else 'PM'}" for i in range(10, 13)] + [f"{i}:00 PM" for i in range(1, 12)] + ["12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", "6:00 AM", "7:00 AM"]
@@ -437,13 +437,13 @@ def render_trends():
 
 def render_5day():
     # 4. 5-DAY FORECAST
-    st.markdown(textwrap.dedent("""
-    <div style="display: flex; align-items: center; gap: 10px; margin-top: 1rem;">
-        <h3 style="margin: 0; color: white;">5-Day Forecast</h3>
-        <span class="badge-ai" style="font-size: 0.65rem; padding: 2px 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">Recursive ML Prediction</span>
-    </div>
-    <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px; margin-bottom: 1rem;">Predicted outlook for the upcoming days.</p>
-    """), unsafe_allow_html=True)
+    st.markdown(f"""
+<div style="display: flex; align-items: center; gap: 10px; margin-top: 1rem;">
+<h3 style="margin: 0; color: white;">5-Day Forecast</h3>
+<span class="badge-ai" style="font-size: 0.65rem; padding: 2px 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">Recursive ML Prediction</span>
+</div>
+<p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px; margin-bottom: 1rem;">Predicted outlook for the upcoming days.</p>
+""", unsafe_allow_html=True)
     
     days = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"]
     dates = [(datetime.today() + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(1, 6)]
@@ -455,58 +455,58 @@ def render_5day():
         with cols[i]:
             bg_color = "rgba(56, 189, 248, 0.08)" if i == 0 else "var(--glass-bg)"
             border_color = "rgba(56, 189, 248, 0.3)" if i == 0 else "var(--glass-border)"
-            st.markdown(textwrap.dedent(f"""
-            <div class="day-card" style="background: {bg_color}; border-color: {border_color};">
-                <span class="day-name">{days[i]}</span>
-                <span class="day-date">{dates[i]}</span>
-                <span class="day-icon">⛅</span>
-                <span class="day-cond">Partly Cloudy</span>
-                <span class="day-temps">34° <span style="color: #94a3b8;">26°</span></span>
-                <div style="margin-top: 1rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
-                    <span class="day-rain">💧 21.1%</span>
-                    <span class="day-rain">☂️ 0%</span>
-                </div>
-            </div>
-            """), unsafe_allow_html=True)
+            st.markdown(f"""
+<div class="day-card" style="background: {bg_color}; border-color: {border_color};">
+<span class="day-name">{days[i]}</span>
+<span class="day-date">{dates[i]}</span>
+<span class="day-icon">⛅</span>
+<span class="day-cond">Partly Cloudy</span>
+<span class="day-temps">34° <span style="color: #94a3b8;">26°</span></span>
+<div style="margin-top: 1rem; border-top: 1px solid var(--glass-border); padding-top: 1rem;">
+<span class="day-rain">💧 21.1%</span>
+<span class="day-rain">☂️ 0%</span>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
 def render_performance():
-    st.markdown(textwrap.dedent("""
-    <div style="margin-top: 1rem;">
-        <h3 style="margin: 0; color: white;">AI Model Performance</h3>
-        <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 5px;">Actual test set metrics from backend validation.</p>
-    </div>
-    
-    <div class="perf-container">
-        <p class="perf-title">Best Performing Model</p>
-        <h1 class="perf-model">Best RF (Test)</h1>
-        
-        <div class="perf-grid">
-            <div class="perf-stat">
-                <h4>R² Score</h4>
-                <h2>0.981</h2>
-                <p>Accuracy</p>
-            </div>
-            <div class="perf-stat">
-                <h4>RMSE</h4>
-                <h2>1.10°</h2>
-                <p>Root Mean Square Error</p>
-            </div>
-            <div class="perf-stat">
-                <h4>MAE</h4>
-                <h2>0.84°</h2>
-                <p>Mean Absolute Error</p>
-            </div>
-        </div>
-        
-        <p style="color: #34d399; font-weight: 600; margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-            <span>✅</span> Model verified on 2025 Test Dataset
-        </p>
-    </div>
-    
-    <p style="text-align: center; color: #64748b; font-size: 0.8rem; margin-top: 3rem;">
-        WeatherAI © 2026. Built with Python, Streamlit, Scikit-learn, and Plotly.
-    </p>
-    """), unsafe_allow_html=True)
+    st.markdown(f"""
+<div style="margin-top: 1rem;">
+<h3 style="margin: 0; color: white;">AI Model Performance</h3>
+<p style="color: #94a3b8; font-size: 0.9rem; margin-top: 5px;">Actual test set metrics from backend validation.</p>
+</div>
+
+<div class="perf-container">
+<p class="perf-title">Best Performing Model</p>
+<h1 class="perf-model">Best RF (Test)</h1>
+
+<div class="perf-grid">
+<div class="perf-stat">
+<h4>R² Score</h4>
+<h2>0.981</h2>
+<p>Accuracy</p>
+</div>
+<div class="perf-stat">
+<h4>RMSE</h4>
+<h2>1.10°</h2>
+<p>Root Mean Square Error</p>
+</div>
+<div class="perf-stat">
+<h4>MAE</h4>
+<h2>0.84°</h2>
+<p>Mean Absolute Error</p>
+</div>
+</div>
+
+<p style="color: #34d399; font-weight: 600; margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+<span>✅</span> Model verified on 2025 Test Dataset
+</p>
+</div>
+
+<p style="text-align: center; color: #64748b; font-size: 0.8rem; margin-top: 3rem;">
+WeatherAI © 2026. Built with Python, Streamlit, Scikit-learn, and Plotly.
+</p>
+""", unsafe_allow_html=True)
 
 # Execute Routing
 if page == "🏠 Dashboard":
