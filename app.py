@@ -674,7 +674,10 @@ function applyTheme(theme) {{
 }}
 
 function reloadData() {{
-  showToast('Data is pre-loaded from the server', 'info');
+  const city = document.getElementById('city-input').value.trim() || {default_city};
+  const url = new URL(window.parent.location.href);
+  url.searchParams.set('city', city);
+  window.parent.location.href = url.toString();
 }}
 
 // === INIT ===
@@ -772,5 +775,5 @@ setTimeout(sendHeight, 800);
 </body>
 </html>"""
 
-# Render at full height using components
-components.html(html, height=2200, scrolling=False)
+# Render using st.iframe (replaces deprecated components.html)
+st.iframe(srcdoc=html, height=2200, scrolling=False)
