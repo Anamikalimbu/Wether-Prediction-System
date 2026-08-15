@@ -722,12 +722,15 @@ function reloadData() {{
 
   // Search — send city back to Streamlit via custom component API
   function searchCity() {{
-    const city = document.getElementById('city-input').value.trim();
-    if (!city) return;
-    if (!CITIES_DATA.includes(city)) {{
-      showToast('⚠️ City "' + city + '" not found. Try autocomplete.', 'error');
+    const cityInput = document.getElementById('city-input').value.trim();
+    if (!cityInput) return;
+    const city = CITIES_DATA.find(c => c.toLowerCase() === cityInput.toLowerCase());
+    if (!city) {{
+      showToast('⚠️ City "' + cityInput + '" not found. Try autocomplete.', 'error');
       return;
     }}
+    // Update input to match the exact case from data
+    document.getElementById('city-input').value = city;
     showToast('🔄 Loading ' + city + '...', 'info');
     if (window.sendCityToPython) {{
       window.sendCityToPython(city);
@@ -739,8 +742,12 @@ function reloadData() {{
     if (e.key === 'Enter') searchCity();
   }});
   document.getElementById('city-input').addEventListener('change', (e) => {{
-    const city = e.target.value.trim();
-    if (CITIES_DATA.includes(city)) searchCity();
+    const cityInput = e.target.value.trim();
+    const city = CITIES_DATA.find(c => c.toLowerCase() === cityInput.toLowerCase());
+    if (city) {{
+      document.getElementById('city-input').value = city;
+      searchCity();
+    }}
   }});
 
   // Close modals on overlay click
