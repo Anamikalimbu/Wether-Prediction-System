@@ -153,6 +153,7 @@ with open(js_path, 'r', encoding='utf-8') as f:
     js_content = f.read()
 
 # Build the inner HTML content
+theme = 'dark'
 html = f"""<style>
 {css_content}
 
@@ -414,10 +415,14 @@ html, body {{
 
 <script>
 // === INJECT PYTHON DATA ===
-const CITIES_DATA   = {cities_json};
-const DASH_DATA     = {dash_json};
-const HOURLY_DATA   = {hourly_json};
-const TREND_DATA    = {trend_json};
+window.CITIES_DATA = {cities_json};
+window.DASH_DATA = {dash_json};
+window.HOURLY_DATA = {hourly_json};
+window.TREND_DATA = {trend_json};
+window.theme = '{theme}';
+
+// Also handle the default_city variable gracefully
+window.default_city = {default_city};
 
 // === POPULATE DATALIST ===
 (function() {{
@@ -430,9 +435,9 @@ const TREND_DATA    = {trend_json};
 }})();
 
 // === RESTORE THEME ===
-const savedTheme = localStorage.getItem('wa-theme') || 'dark';
+var savedTheme = localStorage.getItem('wa-theme') || 'dark';
 document.body.classList.toggle('light', savedTheme === 'light');
-const themeBtn = document.getElementById('theme-btn');
+var themeBtn = document.getElementById('theme-btn');
 if (themeBtn) themeBtn.textContent = savedTheme === 'light' ? '☀️' : '🌙';
 
 // === HELPER FUNCTIONS ===
@@ -558,11 +563,11 @@ function render5Day(d) {{
 }}
 
 // === CHART ===
-let chartInstance = null;
-let chart2Instance = null;
-let currentTab = 'temp';
+var chartInstance = null;
+var chart2Instance = null;
+var currentTab = 'temp';
 
-const CHART_META = {{
+var CHART_META = {{
   temp:     {{ key: 'temp',     label: 'Temperature (°C)',  color: '#fbbf24', fill: 'rgba(251,191,36,0.10)' }},
   humidity: {{ key: 'humidity', label: 'Humidity (%)',       color: '#38bdf8', fill: 'rgba(56,189,248,0.10)' }},
   wind:     {{ key: 'wind',     label: 'Wind Speed (km/h)',  color: '#a78bfa', fill: 'rgba(167,139,250,0.10)' }},
@@ -677,7 +682,7 @@ function reloadData() {{
 }}
 
 // === INIT ===
-document.addEventListener('DOMContentLoaded', () => {{
+(function initApp() {{
   // Nav routing
   document.querySelectorAll('.nav-item[data-page]').forEach(item => {{
     item.addEventListener('click', () => {{
@@ -743,17 +748,21 @@ document.addEventListener('DOMContentLoaded', () => {{
     }});
   }});
 
-  // Load data
-  renderDashboard(DASH_DATA);
-  render5Day(DASH_DATA);
-  renderHourly(HOURLY_DATA);
-  if (TREND_DATA) {{
-    renderChart(TREND_DATA, currentTab);
-  }}
-
-  // Show default page
+  // Show default page first so if rendering crashes, UI is still visible
   showPage('dashboard');
-}});
+
+  // Load data
+  try {{
+    renderDashboard(DASH_DATA);
+    render5Day(DASH_DATA);
+    renderHourly(HOURLY_DATA);
+    if (TREND_DATA) {{
+      renderChart(TREND_DATA, currentTab);
+    }}
+  }} catch (err) {{
+    console.error('Data render error:', err);
+  }}
+}})();
 </script>
 """
 
@@ -761,8 +770,8 @@ document.addEventListener('DOMContentLoaded', () => {{
 # The component wrapper handles rendering the HTML and provides 
 # bidirectional communication with Streamlit.
 import os
-dashboard_path = os.path.join(os.path.dirname(__file__), "dashboard_component")
-dashboard_comp = components.declare_component("dashboard", path=dashboard_path)
+dashboard_path = os.path.join(os.path.dirname(__file__), "dashboard_component_v2")
+dashboard_comp = components.declare_component("dashboard_v2", path=dashboard_path)
 new_city = dashboard_comp(html_content=html, key=f"dash_{selected_city}")
 
 if new_city and new_city != st.session_state.get('selected_city'):
