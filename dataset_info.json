@@ -30,7 +30,7 @@
         "District": "str",
         "Latitude": "float64",
         "Longitude": "float64",
-        "Precip": "int64",
+        "Precip": "float64",
         "Pressure": "float64",
         "Humidity_2m": "float64",
         "RH_2m": "float64",

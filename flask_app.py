@@ -23,8 +23,9 @@ def get_df():
         print(f"Dataset loaded: {len(_df)} rows")
     return _df
 
-def get_condition(temp, rainfall, humidity):
+def get_condition(temp, rainfall, humidity, wind=0):
     if rainfall > 5: return "Rainy"
+    elif wind > 15: return "Windy"
     elif rainfall > 1: return "Partly Cloudy"
     elif humidity > 80: return "Cloudy"
     elif temp > 30: return "Sunny"
@@ -62,8 +63,8 @@ def api_dashboard():
 
     pressure = round(float(last['Pressure']),      1) if 'Pressure'      in last.index else 97.3
     wind     = round(float(last['WindSpeed_10m']), 1) if 'WindSpeed_10m' in last.index else 1.8
-
-    condition = get_condition(temp, rainfall, humidity)
+    
+    condition = get_condition(temp, rainfall, humidity, wind)
 
     # Last-30-days historical trend (all metrics for chart tabs)
     cols = ['Date', 'Temp_2m', 'Precip', 'RH_2m']

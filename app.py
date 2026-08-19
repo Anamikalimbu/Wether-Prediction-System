@@ -54,8 +54,9 @@ def load_data():
     df['Province'] = df['District'].map(DISTRICT_TO_PROVINCE).fillna('Unknown')
     return df
 
-def get_condition(temp, rainfall, humidity):
+def get_condition(temp, rainfall, humidity, wind=0):
     if rainfall > 5: return "Rainy"
+    elif wind > 15: return "Windy"
     elif rainfall > 1: return "Partly Cloudy"
     elif humidity > 80: return "Cloudy"
     elif temp > 30: return "Sunny"
@@ -80,9 +81,11 @@ def get_dashboard_data(city):
         temp     = round(float(last['Temp_2m']), 1)
         rainfall = round(float(last['Precip']),  1)
         humidity = round(float(last['RH_2m']),   1)
+
     pressure = round(float(last['Pressure']),      1) if 'Pressure'      in last.index else 97.3
     wind     = round(float(last['WindSpeed_10m']), 1) if 'WindSpeed_10m' in last.index else 1.8
-    condition = get_condition(temp, rainfall, humidity)
+    
+    condition = get_condition(temp, rainfall, humidity, wind)
     return {
         'city': city,
         'date': datetime.today().strftime('%A, %B %d'),
@@ -524,6 +527,7 @@ function condIcon(cond) {{
   const c = cond.toLowerCase();
   if (c.includes('rain') || c.includes('shower')) return '🌧️';
   if (c.includes('storm') || c.includes('thunder')) return '⛈️';
+  if (c.includes('wind')) return '💨';
   if (c.includes('cloud')) return '⛅';
   if (c.includes('snow')) return '❄️';
   if (c.includes('fog') || c.includes('mist')) return '🌫️';
