@@ -2,7 +2,7 @@
 
 A complete Machine Learning Weather Prediction System suitable for an AI/ML internship or university project. This project trains machine learning models to forecast weather conditions and serves predictions through a modern, responsive web application.
 
-**Status:** ✅ Production-Ready | **Version:** 1.0.0 | **Python:** 3.8+ | **Last Updated:** 2026-08-14
+**Status:** **Version:** 1.0.0 | **Python:** 3.8+ | **Last Updated:** 2026-08-14
 
 ## 🌐 Live Demo - Streamlit Deployment ✅
 
