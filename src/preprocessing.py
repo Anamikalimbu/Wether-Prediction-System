@@ -70,6 +70,15 @@ def feature_engineering(df):
     df['Precip_tomorrow'] = grouped['Precip'].shift(-1)
     df['RH_2m_tomorrow'] = grouped['RH_2m'].shift(-1)
     
+    # Generate Condition column (0: Sunny, 1: Cloudy, 2: Partly Cloudy, 3: Rainy)
+    conditions = np.full(len(df), 2)
+    conditions[df['Temp_2m'] > 30] = 0
+    conditions[df['RH_2m'] > 80] = 1
+    conditions[df['Precip'] > 1] = 2
+    conditions[df['Precip'] > 5] = 3
+    df['Condition'] = conditions
+    df['Condition_tomorrow'] = grouped['Condition'].shift(-1)
+    
     # Drop NaNs created by lagging/shifting if we are preparing for training
     # But for actual inference, we'll keep the last row which will have NaN targets
     
