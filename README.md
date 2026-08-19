@@ -30,114 +30,73 @@ A complete Machine Learning Weather Prediction System suitable for an AI/ML inte
 ```
 Weather Prediction/
 │
-├── 📁 data/
-│   ├── nepal_293_cities_weather_2020_2025.csv      # Raw dataset (6 years, 293 cities)
-│   
-├── 📁 notebooks/
-│   └── weather_prediction_model.ipynb                # Complete ML pipeline (interactive)
-│       ├── 1. Data Loading & Exploration
-│       ├── 2. Exploratory Data Analysis (EDA)
-│       ├── 3. Data Preprocessing & Cleaning
-│       ├── 4. Feature Engineering
-│       ├── 5. Time-Series Splitting
-│       ├── 6. Model Training & Comparison
-│       ├── 7. Model Evaluation & Selection
-│       ├── 8. Hyperparameter Tuning
-│       └── 9. Model Serialization
-│
-├── 📁 models/                                       # Trained model artifacts
-│   ├── best_temperature_model.pkl                   # Best performing Random Forest model
-│   ├── preprocessing_pipeline.pkl                   # Feature scaling & preprocessing
-│   ├── multi_target_models.pkl                      # Multi-output models
-│   ├── city_classes.json                            # City to class mapping
-│   ├── district_classes.json                        # District classifications
-│   └── model_metadata.pkl                           # Model metadata & versioning
-│
-├── 📁 templates/
-│   └── index.html                                   # Single Page Application (SPA)
-│       ├── Header (navigation & branding)
-│       ├── City selector
-│       ├── 5-Day forecast widget
-│       ├── 24-Hour forecast widget
-│       ├── Historical data charts
-│       └── Footer
-│
-├── 📁 static/
-│   ├── 📁 css/
-│   │   └── style.css                                # Glassmorphism styling
-│   │       ├── Variables & color schemes
-│   │       ├── Responsive grid layouts
-│   │       ├── Glassmorphism effects
-│   │       ├── Animation definitions
-│   │       └── Mobile optimization
-│   │
-│   └── 📁 js/
-│       └── script.js                                # Frontend logic & API integration
-│           ├── API client functions
-│           ├── DOM manipulation
-│           ├── Chart.js initialization
-│           ├── Event handlers
-│           ├── Data formatting utilities
-│           └── Error handling
-│
-├── 🐍 app.py                                        # Flask REST API server
-│   ├── App initialization & configuration
-│   ├── Database/model loading
-│   ├── API route handlers
-│   │   ├── GET /api/cities (list all cities)
-│   │   ├── GET /api/forecast/<city> (5-day forecast)
-│   │   ├── GET /api/hourly/<city> (24-hour forecast)
-│   │   ├── GET /api/historical/<city> (historical data)
-│   │   └── POST /api/train (retrain models)
-│   ├── Error handlers
-│   └── Server startup
-│
-├── 🐍 train_models.py                               # Model training script
-│   ├── Data loading
-│   ├── Feature engineering
-│   ├── Model training
-│   ├── Model evaluation
-│   ├── Hyperparameter tuning
-│   └── Model serialization
-│
-├── 🐍 extract.py                                    # Data extraction & preprocessing
-│   ├── CSV parsing utilities
-│   ├── Data cleaning functions
-│   ├── Feature engineering helpers
-│   └── Data validation
-│
-├── 🐍 generate_notebook.py                          # Programmatic notebook generation
-│   ├── Jupyter notebook builder
-│   ├── Cell generation logic
-│   └── Export utilities
-│
+├── 🐍 app.py                                        # Main Streamlit dashboard
+├── 🐍 flask_app.py                                  # Optional Flask dashboard and REST API
 ├── 📋 requirements.txt                              # Python package dependencies
-│
 ├── 📖 README.md                                     # This file - Installation & usage
 ├── 📖 about.md                                      # Project overview & learning outcomes
+├── 📄 dataset_info.json                             # Dataset metadata
+├── 📄 districts.json                                # District information
+├── 🐍 add_rain.py                                   # Dataset utility
+├── 🐍 fix_indent.py                                 # Source-formatting utility
+├── 🐍 get_districts.py                              # District-data utility
+├── 🐍 inspect_data.py                               # Dataset inspection utility
+├── 🐍 generate_nb.py                                # Programmatic notebook generation
 │
-└── 📁 venv/                                         # Virtual environment (created locally)
-    ├── bin/                                         # Scripts (activate, python, pip)
-    ├── lib/                                         # Installed packages
-    └── pyvenv.cfg                                   # Environment configuration
+├── 📁 data/
+│   └── nepal_293_cities_weather_2020_2025.csv       # Raw dataset (2020-2025)
+│
+├── 📁 src/
+│   ├── preprocessing.py                             # Data cleaning and feature engineering
+│   ├── train.py                                    # Model training and evaluation
+│   └── predict.py                                  # Saved-model inference
+│
+├── 📁 models/                                       # Trained model artifacts
+│   ├── feature_columns.pkl                          # Features used during training
+│   ├── model_Temp_2m_tomorrow.pkl                   # Temperature regressor
+│   ├── model_Precip_tomorrow.pkl                    # Precipitation regressor
+│   ├── model_RH_2m_tomorrow.pkl                     # Humidity regressor
+│   └── model_Condition_tomorrow.pkl                 # Weather-condition classifier
+│
+├── 📁 notebooks/
+│   ├── Weather_Prediction_EDA_Modeling.ipynb        # EDA and modeling workflow
+│   └── weather_prediction_model.ipynb               # Complete ML pipeline
+│
+├── 📁 templates/
+│   └── index.html                                   # Flask dashboard template
+│
+├── 📁 static/
+│   ├── css/style.css                                # Dashboard styling
+│   └── js/main.js                                   # Frontend logic and charts
+│
+├── 📁 dashboard_component/
+│   └── index.html                                   # Streamlit component prototype
+│
+└── 📁 dashboard_component_v2/
+   └── index.html                                   # Updated Streamlit component prototype
 ```
 
 ## 📋 File Descriptions
 
 | File | Purpose | Type |
 |------|---------|------|
-| `app.py` | Flask REST API server | Python Script |
-| `train_models.py` | ML model training pipeline | Python Script |
-| `extract.py` | Data preprocessing utilities | Python Module |
-| `generate_notebook.py` | Programmatic notebook generator | Python Utility |
+| `app.py` | Streamlit dashboard | Python Script |
+| `flask_app.py` | Optional Flask dashboard and REST API | Python Script |
+| `src/train.py` | ML model training and evaluation | Python Script |
+| `src/preprocessing.py` | Data cleaning and feature engineering | Python Module |
+| `src/predict.py` | Saved-model inference | Python Module |
+| `generate_nb.py` | Programmatic notebook generator | Python Utility |
 | `requirements.txt` | Python dependencies list | Configuration |
+| `dataset_info.json` | Dataset metadata | JSON Config |
+| `districts.json` | District information | JSON Config |
+| `notebooks/Weather_Prediction_EDA_Modeling.ipynb` | EDA and modeling workflow | Jupyter Notebook |
 | `notebooks/weather_prediction_model.ipynb` | Interactive ML workflow | Jupyter Notebook |
 | `data/nepal_293_cities_weather_2020_2025.csv` | Raw weather dataset | Data File |
-| `models/*.pkl` | Serialized trained models | Binary Models |
-| `models/*.json` | Configuration & mappings | JSON Config |
+| `models/*.pkl` | Serialized trained models and feature columns | Binary Models |
 | `static/css/style.css` | UI styling | CSS Stylesheet |
-| `static/js/script.js` | Frontend logic | JavaScript |
+| `static/js/main.js` | Frontend logic | JavaScript |
 | `templates/index.html` | Web interface | HTML Template |
+| `dashboard_component*/index.html` | Streamlit dashboard components | HTML |
 
 ## ⚙️ Installation & Usage Guide
 
