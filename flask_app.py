@@ -24,24 +24,32 @@ def get_df():
     return _df
 
 def get_condition(temp, rainfall, humidity, wind=0):
-    if rainfall > 5: return "Rainy"
+    if rainfall > 15:
+        if wind > 15: return "Thunderstorm"
+        return "Heavy Rain"
+    elif rainfall > 5: return "Moderate Rain"
+    elif rainfall > 0.5: return "Light Rain"
+    elif rainfall > 0: return "Drizzle"
+    elif temp <= 0: return "Snow"
+    elif humidity > 90 and wind < 5: return "Fog"
+    elif wind > 20: return "Stormy"
     elif wind > 15: return "Windy"
-    elif rainfall > 1: return "Partly Cloudy"
-    elif humidity > 80: return "Cloudy"
-    elif temp > 30: return "Sunny"
-    return "Partly Cloudy"
+    elif humidity > 85: return "Overcast"
+    elif humidity > 65: return "Mostly Cloudy"
+    elif humidity > 40: return "Partly Cloudy"
+    elif temp > 32: return "Hot & Sunny"
+    elif temp < 10: return "Cold & Clear"
+    else: return "Sunny"
 
-# -------------------------------------------------------
 @app.route('/')
 def index():
     df = get_df()
     cities = sorted(df['City'].unique().tolist())
     return render_template('index.html', cities=cities)
 
-# -------------------------------------------------------
 @app.route('/api/dashboard')
 def api_dashboard():
-    city = request.args.get('city', 'Dharan Sub')
+    city = request.args.get('city', 'Dharan')
     df = get_df()
     if city not in df['City'].values:
         return jsonify({'error': f'City "{city}" not found in dataset.'}), 404
@@ -83,7 +91,6 @@ def api_dashboard():
         'trend': trend, 'model_perf': model_perf
     })
 
-# -------------------------------------------------------
 @app.route('/api/hourly')
 def api_hourly():
     """
@@ -91,7 +98,7 @@ def api_hourly():
     applying a realistic diurnal temperature curve.
     Humidity and wind vary inversely/randomly around the daily value.
     """
-    city = request.args.get('city', 'Dharan Sub')
+    city = request.args.get('city', 'Dharan')
     df = get_df()
     if city not in df['City'].values:
         return jsonify({'error': f'City "{city}" not found.'}), 404
@@ -125,11 +132,10 @@ def api_hourly():
 
     return jsonify(hours)
 
-# -------------------------------------------------------
 @app.route('/api/trend')
 def api_trend():
     """Return 30 days of historical data for all 4 chart metrics."""
-    city = request.args.get('city', 'Dharan Sub')
+    city = request.args.get('city', 'Dharan')
     df = get_df()
     if city not in df['City'].values:
         return jsonify({'error': f'City "{city}" not found.'}), 404
@@ -148,7 +154,6 @@ def api_trend():
     }
     return jsonify(result)
 
-# -------------------------------------------------------
 @app.route('/api/cities')
 def api_cities():
     df = get_df()

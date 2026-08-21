@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0b1120" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>WeatherAI — Nepal ML Forecast</title>
   <meta name="description" content="AI-powered weather prediction for 293 cities in Nepal using Machine Learning." />
   <link rel="stylesheet" href="/static/css/style.css" />
@@ -22,15 +25,7 @@
     <a class="nav-item" data-page="dashboard">
       <span class="nav-icon">🏠</span> Dashboard
     </a>
-    <a class="nav-item" data-page="24hr">
-      <span class="nav-icon">🕒</span> 24-Hour Forecast
-    </a>
-    <a class="nav-item" data-page="5day">
-      <span class="nav-icon">📅</span> 5-Day Forecast
-    </a>
-    <a class="nav-item" data-page="model">
-      <span class="nav-icon">📈</span> Model Performance
-    </a>
+
   </nav>
 
   <div class="sidebar-footer">
@@ -43,11 +38,18 @@
   </div>
 </aside>
 
+<!-- Sidebar overlay backdrop for mobile -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <!-- ========== MAIN ========== -->
 <main class="main">
 
   <!-- TOP BAR -->
   <header class="topbar">
+    <!-- Hamburger button (mobile only) -->
+    <button class="hamburger" id="hamburger-btn" aria-label="Open Menu" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </button>
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
@@ -56,14 +58,8 @@
           id="city-input"
           placeholder="Search city..."
           value="Dharan Sub"
-          list="cities-list"
           autocomplete="off"
         />
-        <datalist id="cities-list">
-          {% for city in cities %}
-            <option value="{{ city }}"></option>
-          {% endfor %}
-        </datalist>
       </div>
       <button class="search-btn" id="search-btn">
         🔍 Search
@@ -229,76 +225,6 @@
       <div class="footer">WeatherAI © 2026. Built with Python, Flask, Scikit-learn, and Plotly.</div>
     </div>
 
-    <!-- ===== PAGE: 24HR ===== -->
-    <div id="page-24hr" class="page">
-      <div class="section-header">
-        <div class="section-title">Next 24 Hours</div>
-        <span class="badge badge-blue">ML Prediction</span>
-      </div>
-      <p class="section-sub">Mathematically generated diurnal curve from daily ML predictions.</p>
-      <div class="glass-card" style="padding: 1.5rem; margin-bottom: 2rem;">
-        <div class="hourly-scroll" id="hourly-cards-2">
-          <p style="color: var(--text-muted);">Load from Dashboard first.</p>
-        </div>
-      </div>
-      <div class="glass-card">
-        <div class="chart-header">
-          <div class="section-title">Weather Trends</div>
-          <div class="chart-tabs">
-            <button class="chart-tab active" data-metric="temp">Temp</button>
-            <button class="chart-tab" data-metric="humidity">Humidity</button>
-            <button class="chart-tab" data-metric="wind">Wind</button>
-            <button class="chart-tab" data-metric="rain">Rain</button>
-          </div>
-        </div>
-        <div class="chart-wrapper">
-          <canvas id="trend-chart-2"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PAGE: 5 DAY ===== -->
-    <div id="page-5day" class="page">
-      <div class="section-header">
-        <div class="section-title">5-Day Forecast</div>
-        <span class="badge badge-blue">Recursive ML Prediction</span>
-      </div>
-      <p class="section-sub">Predicted outlook for the upcoming days.</p>
-      <div class="five-day-grid" id="five-day-grid-2">
-        <p style="color: var(--text-muted);">Load from Dashboard first.</p>
-      </div>
-    </div>
-
-    <!-- ===== PAGE: MODEL PERFORMANCE ===== -->
-    <div id="page-model" class="page">
-      <div class="section-header">
-        <div class="section-title">AI Model Performance</div>
-      </div>
-      <p class="section-sub">Actual test set metrics from backend validation.</p>
-      <div class="perf-wrapper" style="margin-top: 1rem;">
-        <div class="perf-label">Best Performing Model</div>
-        <div class="perf-model-name">Best RF (Test)</div>
-        <div class="perf-stats">
-          <div class="perf-stat">
-            <div class="stat-label">R² Score</div>
-            <div class="stat-value">0.981</div>
-            <div class="stat-sub">Accuracy</div>
-          </div>
-          <div class="perf-stat">
-            <div class="stat-label">RMSE</div>
-            <div class="stat-value">1.10°</div>
-            <div class="stat-sub">Root Mean Square Error</div>
-          </div>
-          <div class="perf-stat">
-            <div class="stat-label">MAE</div>
-            <div class="stat-value">0.84°</div>
-            <div class="stat-sub">Mean Absolute Error</div>
-          </div>
-        </div>
-        <div class="verified">✅ Model verified on 2025 Test Dataset</div>
-      </div>
-      <div class="footer">WeatherAI © 2026. Built with Python, Flask, Scikit-learn, and Plotly.</div>
-    </div>
 
   </div><!-- /content -->
 </main>

@@ -2,6 +2,28 @@
 // WeatherAI — Main JavaScript (Full Featured)
 // =============================================
 
+// ---- MOBILE SIDEBAR ----
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const isOpen  = sidebar.classList.contains('open');
+  if (isOpen) {
+    closeSidebar();
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden'; // prevent background scroll
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 let currentCity = 'Dharan Sub';
 let currentTrendData = null;
 let chartInstance = null;
@@ -63,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
       currentTab = metric;
       if (currentTrendData) {
         renderChart(currentTrendData, currentTab);
-        renderChart2(currentTrendData, currentTab);
       }
     });
   });
@@ -89,10 +110,9 @@ function showPage(pageId) {
   if (nav)    nav.classList.add('active');
   
   // Re-render charts to fix Chart.js invisibility issue when container is display:none
-  if (currentTrendData && (pageId === 'dashboard' || pageId === '24hr')) {
+  if (currentTrendData && pageId === 'dashboard') {
       setTimeout(() => {
           renderChart(currentTrendData, currentTab);
-          renderChart2(currentTrendData, currentTab);
       }, 50);
   }
 }
@@ -166,7 +186,6 @@ function renderHourly(hours) {
       </div>`).join('');
   };
   makeCards('hourly-cards');
-  makeCards('hourly-cards-2');
 }
 
 // ---- TREND CHART ----
@@ -177,7 +196,6 @@ function fetchTrend(city) {
       if (data.error) return;
       currentTrendData = data;
       renderChart(data, currentTab);
-      renderChart2(data, currentTab);
     });
 }
 
@@ -248,12 +266,7 @@ function renderChart(data, metric) {
   chartInstance = new Chart(canvas, buildChartConfig(data, metric));
 }
 
-function renderChart2(data, metric) {
-  const canvas = document.getElementById('trend-chart-2');
-  if (!canvas) return;
-  if (window._chart2) { window._chart2.destroy(); }
-  window._chart2 = new Chart(canvas, buildChartConfig(data, metric));
-}
+
 
 // ---- 5 DAY FORECAST ----
 function render5Day(data) {
@@ -292,7 +305,6 @@ function render5Day(data) {
     el.innerHTML = html;
   };
   makeGrid('five-day-grid');
-  makeGrid('five-day-grid-2');
 }
 
 // Patch fetchDashboard to also render 5 day
@@ -313,11 +325,15 @@ window.fetchDashboard = function(city) {
 function condIcon(cond) {
   if (!cond) return '🌤️';
   const c = cond.toLowerCase();
-  if (c.includes('rain') || c.includes('shower')) return '🌧️';
-  if (c.includes('storm') || c.includes('thunder')) return '⛈️';
-  if (c.includes('cloud')) return '⛅';
-  if (c.includes('snow')) return '❄️';
+  if (c.includes('thunder') || c.includes('storm')) return '⛈️';
+  if (c.includes('snow') || c.includes('freez') || c.includes('cold')) return '❄️';
+  if (c.includes('heavy rain')) return '🌧️';
+  if (c.includes('rain') || c.includes('shower') || c.includes('drizzle')) return '🌦️';
   if (c.includes('fog') || c.includes('mist')) return '🌫️';
+  if (c.includes('overcast')) return '☁️';
+  if (c.includes('cloud')) return '⛅';
+  if (c.includes('hot')) return '🌡️';
+  if (c.includes('wind')) return '💨';
   if (c.includes('sunny') || c.includes('clear')) return '☀️';
   return '🌤️';
 }

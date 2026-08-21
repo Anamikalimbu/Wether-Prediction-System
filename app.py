@@ -27,7 +27,7 @@ footer {display: none !important; pointer-events: none !important;}
 #MainMenu {display: none !important;}
 [data-testid="stSidebar"] {display: none;}
 .block-container {padding: 0 !important; max-width: 100% !important;}
-.stApp {background: #0b1120;}
+.stApp {background: transparent;}
 
 /* Fix iframe touch on mobile */
 iframe {
@@ -55,12 +55,22 @@ def load_data():
     return df
 
 def get_condition(temp, rainfall, humidity, wind=0):
-    if rainfall > 5: return "Rainy"
+    if rainfall > 15:
+        if wind > 15: return "Thunderstorm"
+        return "Heavy Rain"
+    elif rainfall > 5: return "Moderate Rain"
+    elif rainfall > 0.5: return "Light Rain"
+    elif rainfall > 0: return "Drizzle"
+    elif temp <= 0: return "Snow"
+    elif humidity > 90 and wind < 5: return "Fog"
+    elif wind > 20: return "Stormy"
     elif wind > 15: return "Windy"
-    elif rainfall > 1: return "Partly Cloudy"
-    elif humidity > 80: return "Cloudy"
-    elif temp > 30: return "Sunny"
-    return "Partly Cloudy"
+    elif humidity > 85: return "Overcast"
+    elif humidity > 65: return "Mostly Cloudy"
+    elif humidity > 40: return "Partly Cloudy"
+    elif temp > 32: return "Hot & Sunny"
+    elif temp < 10: return "Cold & Clear"
+    else: return "Sunny"
 
 df = load_data()
 cities = sorted(df['City'].unique().tolist())
@@ -177,7 +187,7 @@ html = f"""<style>
 html, body {{
   margin: 0; padding: 0;
   overflow-x: hidden;
-  background: #0b1120;
+  background: var(--bg-primary);
   touch-action: manipulation;
   -webkit-overflow-scrolling: touch;
 }}
@@ -216,15 +226,7 @@ input[type="text"], input[type="search"] {{
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <!-- UNIFIED SEARCH: native select works on ALL devices -->
-        <select id="city-select-all" class="city-select-unified" onchange="window.pickCity(this.value)">
-          <option value="" disabled>Select a city...</option>
-        </select>
-        <!-- Desktop text search overlay (hidden on touch) -->
-        <div class="city-autocomplete-wrapper desktop-search">
-          <input type="text" id="city-input" placeholder="Type to search..." value="{selected_city}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search"/>
-          <div class="city-dropdown" id="city-dropdown"></div>
-        </div>
+        <input type="text" id="city-input" placeholder="Type to search..." value="{selected_city}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search"/>
       </div>
       <button class="search-btn" id="search-btn" onclick="window.searchCity()">
         Search
@@ -502,18 +504,7 @@ window.theme = '{theme}';
 // Also handle the default_city variable gracefully
 window.default_city = {default_city};
 
-// === POPULATE ALL CITY SELECTS ===
-(function() {{
-  // Populate the unified native select (works on ALL devices)
-  const allSelects = document.querySelectorAll('#city-select-all, #mobile-city-select');
-  const opts = '<option value="" disabled>Select a city...</option>' + 
-    CITIES_DATA.map(c => `<option value="${{c}}" ${{c === window.default_city ? 'selected' : ''}}>${{c}}</option>`).join('');
-  allSelects.forEach(s => {{ if(s) s.innerHTML = opts; }});
 
-  // If a default city is set, pre-select it
-  const unified = document.getElementById('city-select-all');
-  if (unified && window.default_city) unified.value = window.default_city;
-}})();
 
 // === RESTORE THEME ===
 var savedTheme = localStorage.getItem('wa-theme') || 'dark';
@@ -525,12 +516,15 @@ if (themeBtn) themeBtn.textContent = savedTheme === 'light' ? '☀️' : '🌙';
 function condIcon(cond) {{
   if (!cond) return '🌤️';
   const c = cond.toLowerCase();
-  if (c.includes('rain') || c.includes('shower')) return '🌧️';
-  if (c.includes('storm') || c.includes('thunder')) return '⛈️';
-  if (c.includes('wind')) return '💨';
-  if (c.includes('cloud')) return '⛅';
-  if (c.includes('snow')) return '❄️';
+  if (c.includes('thunder') || c.includes('storm')) return '⛈️';
+  if (c.includes('snow') || c.includes('freez') || c.includes('cold')) return '❄️';
+  if (c.includes('heavy rain')) return '🌧️';
+  if (c.includes('rain') || c.includes('shower') || c.includes('drizzle')) return '🌦️';
   if (c.includes('fog') || c.includes('mist')) return '🌫️';
+  if (c.includes('overcast')) return '☁️';
+  if (c.includes('cloud')) return '⛅';
+  if (c.includes('hot')) return '🌡️';
+  if (c.includes('wind')) return '💨';
   if (c.includes('sunny') || c.includes('clear')) return '☀️';
   return '🌤️';
 }}
@@ -737,8 +731,7 @@ function openModal(id) {{
     const cityEl = document.getElementById('settings-current-city');
     if (cityEl) {{
       const input = document.getElementById('city-input');
-      const sel = document.getElementById('city-select-all');
-      cityEl.textContent = (input && input.value.trim()) || (sel && sel.value) || String({default_city});
+      cityEl.textContent = (input && input.value.trim()) || String({default_city});
     }}
   }}
 }}
@@ -912,13 +905,13 @@ function reloadData() {{
 </script>
 """
 
-# ── Render via Custom Component ───────────────────────────────────────
+# Render via Custom Component 
 # The component wrapper handles rendering the HTML and provides 
 # bidirectional communication with Streamlit.
 import os
 dashboard_path = os.path.join(os.path.dirname(__file__), "dashboard_component_v2")
 dashboard_comp = components.declare_component("dashboard_v2", path=dashboard_path)
-new_city = dashboard_comp(html_content=html, key=f"dash_{selected_city}", height=1800)
+new_city = dashboard_comp(html_content=html, key=f"dash_{selected_city}")
 
 if new_city and new_city != st.session_state.get('selected_city'):
     st.session_state.selected_city = new_city
