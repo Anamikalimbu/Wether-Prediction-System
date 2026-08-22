@@ -1,8 +1,4 @@
-// =============================================
-// WeatherAI — Main JavaScript (Full Featured)
-// =============================================
-
-// ---- MOBILE SIDEBAR ----
+// MOBILE SIDEBAR 
 function toggleSidebar() {
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.getElementById('sidebar-overlay');
@@ -29,7 +25,7 @@ let currentTrendData = null;
 let chartInstance = null;
 let currentTab = 'temp';
 
-// ---- THEME ----
+//  THEME 
 function applyTheme(theme) {
   document.body.classList.toggle('light', theme === 'light');
   localStorage.setItem('wa-theme', theme);
@@ -47,7 +43,7 @@ function toggleTheme() {
   applyTheme(isLight ? 'dark' : 'light');
 }
 
-// ---- NAVIGATION ----
+//  NAVIGATION 
 document.addEventListener('DOMContentLoaded', () => {
   // Restore theme
   const savedTheme = localStorage.getItem('wa-theme') || 'dark';
@@ -122,14 +118,14 @@ function doSearch() {
   if (city) { currentCity = city; fetchAll(city); }
 }
 
-// ---- FETCH ALL DATA ----
+//  FETCH ALL DATA 
 function fetchAll(city) {
   fetchDashboard(city);
   fetchHourly(city);
   fetchTrend(city);
 }
 
-// ---- DASHBOARD ----
+//  DASHBOARD 
 function fetchDashboard(city) {
   setLoadingHero();
   fetch('/api/dashboard?city=' + encodeURIComponent(city))
@@ -163,7 +159,7 @@ function renderDashboard(d) {
   if (d.model_perf) renderPerf(d.model_perf);
 }
 
-// ---- HOURLY 24-HOUR ----
+//  HOURLY 24-HOUR 
 function fetchHourly(city) {
   fetch('/api/hourly?city=' + encodeURIComponent(city))
     .then(r => r.json())
@@ -188,7 +184,7 @@ function renderHourly(hours) {
   makeCards('hourly-cards');
 }
 
-// ---- TREND CHART ----
+// TREND CHART 
 function fetchTrend(city) {
   fetch('/api/trend?city=' + encodeURIComponent(city))
     .then(r => r.json())
@@ -268,7 +264,7 @@ function renderChart(data, metric) {
 
 
 
-// ---- 5 DAY FORECAST ----
+//  5 DAY FORECAST 
 function render5Day(data) {
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const temp = parseFloat(data.temperature || 28);
@@ -363,7 +359,7 @@ function renderPerf(perf) {
   setInner('perf-mae',   perf.mae  || '0.84°');
 }
 
-// ---- MODALS ----
+//  MODALS  
 function openModal(id) {
   const m = document.getElementById(id);
   if (m) m.classList.add('open');
@@ -385,7 +381,7 @@ document.addEventListener('click', e => {
   }
 });
 
-// ---- TOAST NOTIFICATIONS ----
+//  TOAST NOTIFICATIONS 
 function showToast(msg, type = 'info') {
   let toast = document.getElementById('wa-toast');
   if (!toast) {
