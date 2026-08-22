@@ -317,7 +317,7 @@ window.fetchDashboard = function(city) {
     .catch(() => showToast('Connection error', 'error'));
 };
 
-// ---- HELPERS ----
+//  HELPERS 
 function condIcon(cond) {
   if (!cond) return '🌤️';
   const c = cond.toLowerCase();
